@@ -1,0 +1,43 @@
+/* Plans.css */
+.plan-list {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.plan-card-link {
+  text-decoration: none;
+  color: inherit;
+  margin: 10px;
+}
+
+.plan-card {
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 10px;
+  text-align: center;
+  transition: transform 0.3s ease-in-out;
+  cursor: pointer;
+}
+
+.plan-card:hover {
+  transform: scale(1.05);
+}
+
+.plan-modal {
+  display: none;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 1px solid #ddd;
+  border-radius: 10px;
+  padding: 20px;
+  z-index: 1;
+}
+
+.plan-card:hover .plan-modal {
+  display: block;
+}

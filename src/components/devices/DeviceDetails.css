@@ -1,0 +1,26 @@
+/* DeviceDetails.css */
+.device-details-container {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  padding: 20px;
+}
+
+.device-image img {
+  max-width: 100%; /* Adjust the width as per your preference */
+  height: auto;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease-in-out;
+  margin-right: 15px; /* Adjust the margin as needed */
+}
+
+.device-text {
+  margin-left: 5%;
+  max-width: 600px; /* Adjust the width as per your preference */
+  text-align: justify;
+}
+
+.device-details-heading {
+  margin-bottom: 10px;
+}

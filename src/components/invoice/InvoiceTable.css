@@ -1,0 +1,11 @@
+.status-paid {
+  color: green;
+}
+
+.status-pending {
+  color: yellow;
+}
+
+.status-unpaid {
+  color: red;
+}
