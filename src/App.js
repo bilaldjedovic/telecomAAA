@@ -16,7 +16,6 @@ import CreateCustomers from "./components/customers/CreateCustomer";
 import AddData from "./components/addData/AddData";
 import Rating from "./components/rating/Rating";
 import Home from "./components/home/Home";
-import MobileGame from "./components/game/MobileGame";
 
 const App = () => {
   return (
