@@ -56,6 +56,9 @@ const Navbar = () => {
           <Link to="/invoices" className={classes.menuLink}>
             Invoices
           </Link>
+          <Link to="/createCustomers" className={classes.menuLink}>
+            Create Customers
+          </Link>
         </Toolbar>
       </AppBar>
     </div>

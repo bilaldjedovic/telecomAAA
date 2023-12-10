@@ -26,16 +26,6 @@ const CustomersSubscriptionTable = () => {
       });
   }, []);
 
-  const filteredSubscriptions = subscriptions.filter((subscription) => {
-    const fullName = `${subscription.customer.firstName} ${subscription.customer.lastName}`;
-    return (
-      fullName.toLowerCase().includes(filterName.toLowerCase()) &&
-      subscription.customer.lastName
-        .toLowerCase()
-        .includes(filterLastName.toLowerCase())
-    );
-  });
-
   const handleEdit = (subscription) => {
     navigate("/subscriptions/details", { state: { subId: subscription } });
   };
@@ -79,7 +69,6 @@ const CustomersSubscriptionTable = () => {
             <th>Device info</th>
             <th>Device number of months</th>
             <th>Device active</th>
-            <th>Custom plan</th>
             <th>Plan</th>
             <th>Start date of Subscription</th>
             <th>Telephone Number</th>
@@ -88,41 +77,11 @@ const CustomersSubscriptionTable = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredSubscriptions.map((subscription) => (
+          {subscriptions.map((subscription) => (
             <tr key={subscription.id}>
               <td>{subscription.id}</td>
-              <td>
-                {subscription.customer.firstName +
-                  " " +
-                  subscription.customer.lastName}
-              </td>
-              <td>
-                {subscription.deviceInfo.device.make +
-                  " " +
-                  subscription.deviceInfo.device.model}
-              </td>
-              <td>
-                {subscription.deviceInfo.onNumberOfMonths === null
-                  ? "N/A"
-                  : subscription.deviceInfo.onNumberOfMonths > 0
-                  ? `Months: ${subscription.deviceInfo.onNumberOfMonths}`
-                  : "Invalid number of months"}
-              </td>
-              <td>
-                {subscription.deviceInfo.isActive === true
-                  ? "Yes"
-                  : subscription.deviceInfo.isActive === false
-                  ? "No"
-                  : "Unknown"}
-              </td>
-              <td>
-                {subscription.customPlan
-                  ? subscription.customPlan
-                  : "Telecom plan"}
-              </td>
-              <td>
-                {subscription.plan ? subscription.plan.name : "Custom Plan"}
-              </td>
+              <td>{subscription.customerId}</td>
+              <td>{subscription.deviceInfoId}</td>
 
               <td>
                 {new Date(subscription.startDate).toLocaleDateString("en-GB")}

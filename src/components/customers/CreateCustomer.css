@@ -1,0 +1,138 @@
+.data-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.data-item {
+  width: 80%;
+  margin: 10px;
+  padding: 20px;
+  border-radius: 15px;
+  display: flex;
+  align-items: center;
+  background-color: #f1f1f1;
+  transition: transform 0.3s ease;
+}
+
+.data-item:hover {
+  transform: scale(1.02);
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+}
+
+.store-image {
+  flex: 1;
+  max-width: 30%;
+  margin-right: 20px;
+  height: 100%;
+  transition: opacity 0.3s ease;
+}
+
+.store-image img {
+  width: 100%;
+  border-radius: 5px;
+  height: 100%;
+}
+
+.store-info {
+  flex: 2;
+}
+
+.store-name {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.store-name:hover {
+  font-size: 20px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  cursor: pointer;
+}
+
+.store-address,
+.store-contact,
+.store-description {
+  margin-bottom: 5px;
+  color: #235ba6;
+}
+
+.store-details-button {
+  margin-top: auto;
+  padding: 10px 20px;
+  background-color: #3f51b5;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.store-details-button:hover {
+  background-color: #0056b3;
+}
+
+.modal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.modal-content {
+  width: 400px;
+  background-color: #fff;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+.modal h2 {
+  margin-bottom: 20px;
+  color: #235ba6;
+}
+
+.modal button {
+  padding: 10px 20px;
+  background-color: #007bff;
+  border: none;
+  border-radius: 5px;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.modal button:hover {
+  background-color: #0056b3;
+}
+
+.modal input[type="text"],
+.modal select,
+.modal input[type="datetime-local"] {
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+
+.modal input[type="datetime-local"] {
+  height: 38px;
+}
+
+.modal button[type="submit"] {
+  background-color: #4caf50;
+}
+
+.modal button[type="submit"]:hover {
+  background-color: #45a049;
+}
+
+.modal .cancel-button {
+  float: right;
+}

@@ -11,7 +11,8 @@ import DeviceDetails from "./components/devices/DeviceDetails";
 import Plan from "./components/plans/Plan";
 import PlanDetails from "./components/plans/PlanDetails";
 import InvoiceTable from "./components/invoice/InvoiceTable";
-import InvoiceDetails from "./components/invoice/CustomerSubscriptionDetails";
+import InvoiceDetails from "./components/invoice/InvoiceDetails";
+import CreateCustomers from "./components/customers/CreateCustomer";
 
 const App = () => {
   return (
@@ -36,7 +37,8 @@ const App = () => {
           <Route path="/plans" element={<Plan />} />
           <Route path="/plans/:planId" element={<PlanDetails />} />
           <Route path="/invoices" element={<InvoiceTable />} />
-          <Route path="/invoices/details" element={<InvoiceDetails />} />
+          <Route path="/invoice/details" element={<InvoiceDetails />} />
+          <Route path="/createCustomers" element={<CreateCustomers />} />
         </Routes>
       </div>
     </Router>

@@ -253,9 +253,9 @@ const CustomersTable = () => {
               <td>
                 <Button onClick={() => handleEdit(customer.id)}>View</Button>
 
-                <button onClick={() => handleDelete(customer.id)}>
+                <Button onClick={() => handleDelete(customer.id)}>
                   Delete
-                </button>
+                </Button>
               </td>
             </tr>
           ))}

@@ -76,12 +76,7 @@ const InvoiceTable = () => {
           {invoices.map((invoice) => (
             <tr key={invoice.id}>
               <td>{invoice.id}</td>
-              <td>
-                {`${invoice.customerSubscription.customer.firstName} ${invoice.customerSubscription.customer.lastName}`}
-              </td>
-              <td>
-                {`${invoice.customerSubscription.customer.address}, ${invoice.customerSubscription.customer.location.city}, ${invoice.customerSubscription.customer.location.district}`}
-              </td>
+              <td>{`${invoice.customerSubscription.customerId}`}</td>
 
               <td>{invoice.totalCost}</td>
               <td>{new Date(invoice.dueDate).toLocaleDateString("en-GB")}</td>

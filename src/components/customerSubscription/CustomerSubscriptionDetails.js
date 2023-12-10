@@ -77,16 +77,16 @@ const CustomerSubscriptionDetails = () => {
           <tr>
             <th>Plan</th>
             <td>
-              {subscription.plan ? subscription.plan.name : "Custom Plan"}
+              {subscription.customPlan ? "Custom Plan" : subscription.plan.name}
             </td>
           </tr>
           <tr>
             <th>Plan cost</th>
-            <td>{`${subscription.plan.costPerMonth} $`}</td>
+            <td>{`${subscription.plan?.costPerMonth} $`}</td>
           </tr>
           <tr>
             <th>Plan length</th>
-            <td>{`${subscription.plan.minimumContractLength} months`}</td>
+            <td>{`${subscription.plan?.minimumContractLength} months`}</td>
           </tr>
           <tr>
             <th>Start date of Subscription</th>
