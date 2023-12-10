@@ -1,0 +1,63 @@
+.feedback-container {
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  height: 85vh;
+  background-color: transparent;
+  padding: 20px;
+}
+
+.feedback-box {
+  background-color: #efeeee;
+  /* Light gray background color */
+  border-radius: 10px;
+  /* Rounded corners */
+  padding: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  /* Drop shadow for depth */
+  text-align: center;
+  width: 30%;
+}
+
+.feedback-container h1 {
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #3f51b5;
+}
+
+.feedback-container label {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+.feedback-container select,
+.feedback-container textarea {
+  width: 90%;
+  padding: 10px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 5px;
+  background-color: #ffffff;
+  /* White background for input fields */
+  color: #3f51b5;
+}
+
+.feedback-container textarea {
+  max-width: 90%;
+  min-width: 90%;
+  max-height: 500px;
+}
+
+.feedback-container button {
+  background-color: #3f51b5;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  padding: 10px;
+  color: white;
+}
+
+.feedback-container button:disabled {
+  cursor: not-allowed;
+}

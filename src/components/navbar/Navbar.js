@@ -41,6 +41,9 @@ const Navbar = () => {
           <Typography variant="h6" className={classes.title}>
             TELECOM
           </Typography>
+          <Link to="/home" className={classes.menuLink}>
+            Home
+          </Link>
           <Link to="/customers" className={classes.menuLink}>
             Customers
           </Link>
@@ -58,6 +61,13 @@ const Navbar = () => {
           </Link>
           <Link to="/createCustomers" className={classes.menuLink}>
             Create Customers
+          </Link>
+
+          <Link to="/addData" className={classes.menuLink}>
+            Add Data
+          </Link>
+          <Link to="/feedback" className={classes.menuLink}>
+            Rating
           </Link>
         </Toolbar>
       </AppBar>

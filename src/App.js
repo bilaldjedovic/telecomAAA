@@ -13,6 +13,10 @@ import PlanDetails from "./components/plans/PlanDetails";
 import InvoiceTable from "./components/invoice/InvoiceTable";
 import InvoiceDetails from "./components/invoice/InvoiceDetails";
 import CreateCustomers from "./components/customers/CreateCustomer";
+import AddData from "./components/addData/AddData";
+import Rating from "./components/rating/Rating";
+import Home from "./components/home/Home";
+import MobileGame from "./components/game/MobileGame";
 
 const App = () => {
   return (
@@ -20,6 +24,8 @@ const App = () => {
       <div>
         <Navbar />
         <Routes>
+          <Route path="/home" element={<Home />} />
+
           <Route path="/customers" element={<CustomersTable />} />
           <Route path="/customer/edit" element={<CustomerDetails />} />
           <Route
@@ -39,6 +45,8 @@ const App = () => {
           <Route path="/invoices" element={<InvoiceTable />} />
           <Route path="/invoice/details" element={<InvoiceDetails />} />
           <Route path="/createCustomers" element={<CreateCustomers />} />
+          <Route path="/addData" element={<AddData />} />
+          <Route path="/feedback" element={<Rating />} />
         </Routes>
       </div>
     </Router>

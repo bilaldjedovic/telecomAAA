@@ -370,8 +370,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
         customPlanIdToSend = customPlanId;
       }
 
-      // Send the correct data to the server
-      const response = await axios.post(
+      await axios.post(
         "http://localhost:8080/customerSubscription/createCustomerSubscription",
         {
           customerId: customerId,
