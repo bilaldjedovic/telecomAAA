@@ -1,0 +1,15 @@
+.filter-container {
+  margin-bottom: 20px;
+}
+
+.filter-container input {
+  margin-right: 10px;
+}
+
+.MuiInputLabel-root.Mui-focused {
+  transform: translate(14px, -6px) scale(0.75);
+}
+
+.MuiInputLabel-root.Mui-focused.MuiInputLabel-shrink {
+  transform: translate(14px, -22px) scale(0.75);
+}

@@ -1,32 +1,27 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
+import { Form, Button, Alert } from "react-bootstrap";
 import "./Rating.css";
 
 const Rating = () => {
-  const [rating, setRating] = useState(0);
-  const [message, setMessage] = useState("");
   const [review, setReview] = useState({
     customerId: 1,
-    feedbackDate: new Date().toISOString().split("T")[0], // Set default date to today
+    feedbackDate: new Date().toISOString().split("T")[0],
     rating: 0,
     feedbackText: "",
   });
   const [isSuccess, setIsSuccess] = useState(false);
 
   const handleRatingChange = (e) => {
-    let newRating = parseInt(e.target.value);
-
     setReview((prevReview) => ({
       ...prevReview,
-      rating: newRating,
+      rating: parseInt(e.target.value),
     }));
   };
 
   const handleMessageChange = (e) => {
-    let message = e.target.value;
-
     setReview((prevReview) => ({
       ...prevReview,
-      feedbackText: message,
+      feedbackText: e.target.value,
     }));
   };
 
@@ -45,14 +40,12 @@ const Rating = () => {
           console.log("Feedback submitted successfully!");
 
           // Clear rating and feedback text
-          setRating(0);
           setReview({
             ...review,
             rating: 0,
             feedbackText: "",
           });
 
-          setMessage("");
           setIsSuccess(true);
 
           // Reset success message after a delay
@@ -69,41 +62,49 @@ const Rating = () => {
   };
 
   return (
-    <>
-      <div className="feedback-container">
-        <div className="feedback-box">
-          <h1>Customer Feedback</h1>
-          {isSuccess && (
-            <p className="success-message">Feedback sent successfully!</p>
-          )}
-          <div>
-            <label>Rate our service:</label>
-            <select value={review.rating} onChange={handleRatingChange}>
+    <div className="feedback-container">
+      <div className="feedback-box">
+        <h1>Customer Feedback</h1>
+        {isSuccess && (
+          <Alert variant="success">Feedback sent successfully!</Alert>
+        )}
+        <Form>
+          <Form.Group controlId="ratingSelect">
+            <Form.Label>Rate our service:</Form.Label>
+            <Form.Control
+              as="select"
+              value={review.rating}
+              onChange={handleRatingChange}
+            >
               <option value="0">Select rating</option>
               <option value="1">⭐</option>
               <option value="2">⭐⭐</option>
               <option value="3">⭐⭐⭐</option>
               <option value="4">⭐⭐⭐⭐</option>
               <option value="5">⭐⭐⭐⭐⭐</option>
-            </select>
-          </div>
-          <div>
-            <label>Leave a short message:</label>
-            <textarea
+            </Form.Control>
+          </Form.Group>
+
+          <Form.Group controlId="feedbackTextarea">
+            <Form.Label>Leave a short message:</Form.Label>
+            <Form.Control
+              as="textarea"
               value={review.feedbackText}
               onChange={handleMessageChange}
               placeholder="Your feedback..."
-            ></textarea>
-          </div>
-          <button
+            />
+          </Form.Group>
+
+          <Button
+            variant="primary"
             onClick={handleSubmit}
             disabled={review.feedbackText === "" || review.rating === 0}
           >
             Submit Feedback
-          </button>
-        </div>
+          </Button>
+        </Form>
       </div>
-    </>
+    </div>
   );
 };
 

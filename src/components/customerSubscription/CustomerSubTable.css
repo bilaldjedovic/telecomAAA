@@ -1,0 +1,57 @@
+/* Add this CSS to your component or import it in your project */
+
+/* Style for the main container */
+
+/* Style for the filter inputs */
+h2 div {
+  margin-bottom: 10px;
+  padding: 5px;
+  margin-top: 10px;
+}
+
+/* Style for the table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  font-size: 14px; /* Adjust the font size as needed */
+}
+
+/* Style for the table headers */
+thead {
+  background-color: #f2f2f2;
+}
+
+th,
+td {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 6px; /* Adjust the padding as needed */
+}
+
+/* Style for odd rows */
+tbody tr:nth-child(odd) {
+  background-color: #f9f9f9;
+}
+
+/* Style for even rows */
+tbody tr:nth-child(even) {
+  background-color: #ffffff;
+}
+
+/* Style for the View button */
+button {
+  background-color: #4caf50;
+  color: white;
+  border: none;
+  padding: 6px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 12px; /* Adjust the font size as needed */
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #45a049;
+}

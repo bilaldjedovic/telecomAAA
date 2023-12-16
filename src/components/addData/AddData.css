@@ -1,0 +1,54 @@
+/* AddData.css */
+
+.add-data-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 20px;
+  background-color: #f4f4f4;
+}
+
+.add-data-container h4 {
+  margin-bottom: 20px;
+}
+
+.button-container {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.button-container button {
+  padding: 10px 20px;
+}
+
+.modal-container {
+  max-width: 400px;
+  margin: 20px;
+  padding: 20px;
+  background-color: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+form {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+h4 {
+  margin-bottom: 20px;
+}
+
+/* Common styles for buttons */
+button {
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+/* Role-specific styles */
+.role-buttons {
+  display: flex;
+  gap: 10px;
+}

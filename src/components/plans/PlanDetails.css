@@ -1,40 +1,47 @@
-/* DeviceDetails.css */
-.device-details-container {
+/* PlanDetails.css */
+.plan-details-container {
   display: flex;
   justify-content: space-around;
-  align-items: center;
+  align-items: flex-start; /* Align items to the top */
+  margin: 20px;
   padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
-.device-image img {
-  max-width: 100%; /* Adjust the width as per your preference */
+.plan-image img {
+  max-width: 100%;
   height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  margin-right: 15px; /* Adjust the margin as needed */
 }
 
-.device-text {
-  margin-left: 5%;
-  max-width: 600px; /* Adjust the width as per your preference */
-  text-align: justify;
+.plan-text {
+  max-width: 600px;
 }
 
-.device-details-heading {
-  margin-bottom: 10px;
-}
-
-p {
-  font-family: "Arial", sans-serif;
-  font-size: 16px;
-  line-height: 1.6;
+.plan-details-heading {
   color: #333;
 }
 
-pre {
-  background-color: #f5f5f5;
-  padding: 15px;
-  border-radius: 5px;
-  overflow-x: auto;
+.plan-info {
+  margin: 10px 0;
+}
+
+.plan-description {
+  margin-top: 10px;
+  white-space: pre-wrap;
+  line-height: 1.5;
+  max-width: 100%; /* Ensure the pre element doesn't overflow */
+  overflow: auto; /* Add scrolling for long descriptions */
+}
+
+.loading-message,
+.error-message {
+  margin: 20px;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f8d7da;
+  color: #721c24;
 }

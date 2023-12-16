@@ -1,7 +1,7 @@
 /* Add this CSS to your stylesheet or component style */
 
 .AppBar {
-  background-color: #2196f3; /* Change to your desired background color */
+  background-color: #ffffff; /* Change to your desired background color */
 }
 
 .Toolbar {
@@ -10,7 +10,7 @@
 }
 
 .menuLink {
-  color: white;
+  color: #2196f3; /* Change to your desired background color */
   text-decoration: none;
   margin-left: 20px; /* Adjust spacing between links */
   font-size: 16px; /* Adjust font size */

@@ -1,25 +1,55 @@
-.device-details-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  padding: 20px;
-}
+/* InvoiceDetails.css */
 
-.device-image img {
-  max-width: 100%;
-  height: auto;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s ease-in-out;
-  margin-right: 15px;
+.device-details-container {
+  display: inline-block;
+  justify-content: center;
+  align-items: center;
+  margin-left: 20%;
+  height: 100vh;
 }
 
 .device-text {
-  margin-left: 5%;
-  max-width: 600px;
-  text-align: justify;
+  max-width: 800px;
+  padding: 20px;
+  background-color: #fff;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 }
 
 .device-details-heading {
-  margin-bottom: 10px;
+  color: #007bff;
+}
+
+.container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.container img {
+  max-width: 150px;
+  max-height: 150px;
+}
+
+#printable-content {
+  border: 1px solid #ccc;
+  padding: 20px;
+  margin-top: 20px;
+}
+
+button {
+  margin-top: 20px;
+  padding: 10px;
+  background-color: #007bff;
+  color: #fff;
+  border: none;
+  cursor: pointer;
+}
+
+.loading-message,
+.error-message {
+  text-align: center;
+  margin-top: 20px;
+  font-size: 18px;
+  color: #ff0000;
 }

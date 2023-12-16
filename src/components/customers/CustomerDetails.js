@@ -1,14 +1,72 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useLocation, Link } from "react-router-dom";
-import { Button } from "@material-ui/core";
-import { BounceLoader } from "react-spinners";
+import {
+  Button,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TextField,
+  Select,
+  MenuItem,
+  FormControl,
+  InputLabel,
+  Typography,
+  createTheme,
+  ThemeProvider,
+} from "@mui/material";
+import { makeStyles } from "@material-ui/core/styles";
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: "#1976D2",
+    },
+    secondary: {
+      main: "#FF4081",
+    },
+  },
+});
+
+const useStyles = makeStyles((theme) => ({
+  container: {
+    padding: theme.spacing(2),
+  },
+  form: {
+    display: "flex",
+    flexDirection: "column",
+    gap: theme.spacing(2),
+  },
+  buttonContainer: {
+    display: "flex",
+    justifyContent: "flex-end",
+    marginTop: theme.spacing(2),
+  },
+  tableContainer: {
+    marginTop: theme.spacing(3),
+  },
+  backButton: {
+    textDecoration: "none",
+    color: theme.palette.primary.main,
+  },
+  editButton: {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
 const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
-  const [editedCustomer, setEditedCustomer] = useState({ ...customer });
+  const [editedCustomer, setEditedCustomer] = useState({
+    ...customer,
+    location: { city: "", district: "", id: "" },
+    occupation: { occupationName: "", id: "" },
+  });
   const [locations, setLocations] = useState([]);
   const [occupations, setOccupations] = useState([]);
-  const [genders, setGenders] = useState([]);
+  const classes = useStyles();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,13 +77,9 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
         const occupationsResponse = await axios.get(
           "http://localhost:8080/occupation/getAllOccupations"
         );
-        const gendersResponse = await axios.get(
-          "http://localhost:8080/gender/getAllGenders"
-        );
 
         setLocations(locationsResponse.data);
         setOccupations(occupationsResponse.data);
-        setGenders(gendersResponse.data);
       } catch (error) {
         console.error("Error fetching select field data: ", error);
       }
@@ -37,129 +91,141 @@ const EditCustomerModal = ({ customer, onClose, onUpdate }) => {
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    const [fieldName, nestedFieldName] = name.split(".");
+    setEditedCustomer((prevCustomer) => ({
+      ...prevCustomer,
+      [name]: value,
+    }));
+  };
 
-    if (nestedFieldName) {
-      setEditedCustomer((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: {
-          ...prevCustomer[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setEditedCustomer((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: value,
-      }));
-    }
+  const handleNestedInputChange = (parentName, nestedName, value, id) => {
+    setEditedCustomer((prevCustomer) => ({
+      ...prevCustomer,
+      [parentName]: {
+        ...prevCustomer[parentName],
+        [nestedName]: value,
+        id: id,
+      },
+    }));
   };
 
   const handleUpdate = async () => {
-    try {
-      await axios.put(
-        `http://localhost:8080/customer/updateCustomer/${editedCustomer.id}`,
-        editedCustomer
-      );
+    if (customer) {
+      const customerToSend = {
+        id: customer.id,
+        locationId: editedCustomer.location.id,
+        occupationId: editedCustomer.occupation.id,
+        address: editedCustomer.address,
+        lastName: editedCustomer.lastName,
+        firstName: editedCustomer.firstName,
+        genderId: editedCustomer.genderId,
+      };
+      try {
+        await axios.put(
+          `http://localhost:8080/customer/updateCustomer/${editedCustomer.id}`,
+          customerToSend
+        );
 
-      onUpdate(editedCustomer);
-      onClose();
-      window.location.reload();
-    } catch (error) {
-      console.error("Error updating customer: ", error);
+        console.log("After update - editedCustomer:", customerToSend);
+
+        onUpdate(customerToSend);
+        onClose();
+        window.location.reload();
+      } catch (error) {
+        console.error("Error updating customer: ", error);
+      }
     }
   };
 
   return (
-    <div>
-      <h2>Edit Customer</h2>
-      <form>
-        <label>
-          First Name:
-          <input
-            type="text"
+    <ThemeProvider theme={theme}>
+      <div className={classes.container}>
+        <Typography variant="h5">Edit Customer</Typography>
+        <form className={classes.form}>
+          <TextField
+            label="First Name"
             name="firstName"
             value={editedCustomer.firstName}
             onChange={handleInputChange}
           />
-        </label>
-
-        <label>
-          Last Name:
-          <input
-            type="text"
+          <TextField
+            label="Last Name"
             name="lastName"
             value={editedCustomer.lastName}
             onChange={handleInputChange}
           />
-        </label>
 
-        <label>
-          Location:
-          <select
-            name="location.city"
-            value={editedCustomer.location.city}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Location</option>
-            {locations.map((location) => (
-              <option key={location.id} value={location.city}>
-                {location.city}, {location.district}
-              </option>
-            ))}
-          </select>
-        </label>
+          <FormControl>
+            <InputLabel>Location</InputLabel>
+            <Select
+              name="location.city"
+              value={editedCustomer.location.city}
+              onChange={(e) =>
+                handleNestedInputChange(
+                  "location",
+                  "city",
+                  e.target.value,
+                  locations.find((location) => location.city === e.target.value)
+                    ?.id
+                )
+              }
+            >
+              <MenuItem value="">Select Location</MenuItem>
+              {locations.map((location) => (
+                <MenuItem key={location.id} value={location.city}>
+                  {location.city}, {location.district}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        <label>
-          Occupation:
-          <select
-            name="occupation.occupationName"
-            value={editedCustomer.occupation.occupationName}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Occupation</option>
-            {occupations.map((occupation) => (
-              <option key={occupation.id} value={occupation.occupationName}>
-                {occupation.occupationName}
-              </option>
-            ))}
-          </select>
-        </label>
+          <FormControl>
+            <InputLabel>Occupation</InputLabel>
+            <Select
+              name="occupation.occupationName"
+              value={editedCustomer.occupation.occupationName}
+              onChange={(e) =>
+                handleNestedInputChange(
+                  "occupation",
+                  "occupationName",
+                  e.target.value,
+                  occupations.find(
+                    (occupation) => occupation.occupationName === e.target.value
+                  )?.id
+                )
+              }
+            >
+              <MenuItem value="">Select Occupation</MenuItem>
+              {occupations.map((occupation) => (
+                <MenuItem key={occupation.id} value={occupation.occupationName}>
+                  {occupation.occupationName}
+                </MenuItem>
+              ))}
+            </Select>
+          </FormControl>
 
-        <label>
-          Gender:
-          <select
-            name="gender.gender"
-            value={editedCustomer.gender.gender}
-            onChange={handleInputChange}
-          >
-            <option value="">Select Gender</option>
-            {genders.map((gender) => (
-              <option key={gender.id} value={gender.gender}>
-                {gender.gender}
-              </option>
-            ))}
-          </select>
-        </label>
-
-        <label>
-          Address:
-          <input
-            type="text"
+          <TextField
+            label="Address"
             name="address"
             value={editedCustomer.address}
             onChange={handleInputChange}
           />
-        </label>
 
-        <button type="button" onClick={handleUpdate}>
-          Save Changes
-        </button>
-        <button type="button" onClick={onClose}>
-          Cancel
-        </button>
-      </form>
-    </div>
+          <div className={classes.buttonContainer}>
+            <Button onClick={handleUpdate} variant="contained" color="primary">
+              Save Changes
+            </Button>
+            <Button
+              onClick={onClose}
+              variant="contained"
+              color="secondary"
+              className={classes.editButton}
+            >
+              Cancel
+            </Button>
+          </div>
+        </form>
+      </div>
+    </ThemeProvider>
   );
 };
 
@@ -167,32 +233,41 @@ const CustomerDetails = () => {
   const [customer, setCustomer] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [user, setUser] = useState(null);
+  const [deviceInfo, setDeviceInfo] = useState(null);
   const { state } = useLocation();
   const { custId } = state;
+  const classes = useStyles();
 
   useEffect(() => {
-    axios
-      .get(`http://localhost:8080/customer/getCustomerById/${custId}`)
-      .then((response) => {
-        console.log("Response data:", response.data);
-        setCustomer(response.data);
+    const fetchData = async () => {
+      try {
+        const customerResponse = await axios.get(
+          `http://localhost:8080/customer/getCustomerById/${custId}`
+        );
+        console.log("Customer Response data:", customerResponse.data);
+        setCustomer(customerResponse.data);
 
-        const customerId = response.data.id;
-        axios
-          .get(
-            `http://localhost:8080/customerSubscription/getCustomerSubscriptionByCustomerId/${customerId}`
-          )
-          .then((userResponse) => {
-            console.log("User Response data:", userResponse.data);
-            setUser(userResponse.data);
-          })
-          .catch((error) => {
-            console.error("Error fetching user details: ", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error fetching customer details: ", error);
-      });
+        const customerId = customerResponse.data.id;
+
+        const userResponse = await axios.get(
+          `http://localhost:8080/customerSubscription/getCustomerSubscriptionByCustomerId/${customerId}`
+        );
+        console.log("User Response data:", userResponse.data);
+        setUser(userResponse.data);
+
+        if (userResponse.data && userResponse.data.deviceInfoId) {
+          const deviceInfoResponse = await axios.get(
+            `http://localhost:8080/customerSubscriptionDeviceInfo/getCustomerSubscriptionDeviceInfoById/${userResponse.data.deviceInfoId}`
+          );
+          console.log("DeviceInfo Response data:", deviceInfoResponse.data);
+          setDeviceInfo(deviceInfoResponse.data);
+        }
+      } catch (error) {
+        console.error("Error fetching data: ", error);
+      }
+    };
+
+    fetchData();
   }, [custId]);
 
   const handleEdit = () => {
@@ -207,129 +282,150 @@ const CustomerDetails = () => {
     setCustomer(updatedCustomer);
   };
 
-  if ((!customer, !user)) {
+  if (!customer) {
     return <div>Loading...</div>;
   }
 
   return (
-    <div>
-      {!customer && !user ? (
-        <div className="loader">
-          <BounceLoader
-            size={30}
-            color={"rgb(220,53,69)"}
-            loading={customer && user}
+    <ThemeProvider theme={theme}>
+      <div className={classes.container}>
+        <Typography variant="h5">Customer Details</Typography>
+        <Link to={"/customers"} className={classes.backButton}>
+          <Button variant="outlined" color="primary">
+            Back
+          </Button>
+        </Link>
+
+        <TableContainer component={Paper} className={classes.tableContainer}>
+          <Table>
+            <TableBody>
+              <TableRow>
+                <TableCell>ID</TableCell>
+                <TableCell>{customer.id}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>First Name</TableCell>
+                <TableCell>{customer.firstName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Last Name</TableCell>
+                <TableCell>{customer.lastName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Gender</TableCell>
+                <TableCell>{customer.gender}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Occupation</TableCell>
+                <TableCell>{customer.occupationName}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>Address</TableCell>
+                <TableCell>{customer.address}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>City</TableCell>
+                <TableCell>{customer.city}</TableCell>
+              </TableRow>
+              <TableRow>
+                <TableCell>District</TableCell>
+                <TableCell>{customer.district}</TableCell>
+              </TableRow>
+            </TableBody>
+          </Table>
+        </TableContainer>
+
+        <div className={classes.buttonContainer}>
+          <Button
+            onClick={handleEdit}
+            variant="contained"
+            color="primary"
+            className={classes.editButton}
+          >
+            Edit
+          </Button>
+        </div>
+
+        {showEditModal && (
+          <EditCustomerModal
+            customer={customer}
+            onClose={handleEditModalClose}
+            onUpdate={handleUpdateCustomer}
           />
-        </div>
-      ) : (
-        <div>
-          {customer && (
-            <div>
-              <h2>Customer Details</h2>
-              <Link to={"/customers"}>
-                <Button>Back</Button>
-              </Link>
-              <table>
-                <tbody>
-                  <tr>
-                    <th>ID</th>
-                    <td>{customer.id}</td>
-                  </tr>
-                  <tr>
-                    <th>First Name</th>
-                    <td>{customer.firstName}</td>
-                  </tr>
-                  <tr>
-                    <th>Last Name</th>
-                    <td>{customer.lastName}</td>
-                  </tr>
-                  <tr>
-                    <th>Gender</th>
-                    <td>{customer.gender.gender}</td>
-                  </tr>
-                  <tr>
-                    <th>Occupation</th>
-                    <td>{customer.occupation.occupationName}</td>
-                  </tr>
-                  <tr>
-                    <th>Address</th>
-                    <td>{customer.address}</td>
-                  </tr>
-                  <tr>
-                    <th>City</th>
-                    <td>{customer.location.city}</td>
-                  </tr>
-                  <tr>
-                    <th>District</th>
-                    <td>{customer.location.district}</td>
-                  </tr>
-                </tbody>
-              </table>
-              <button onClick={handleEdit}>Edit</button>
-              {showEditModal && (
-                <EditCustomerModal
-                  customer={customer}
-                  onClose={handleEditModalClose}
-                  onUpdate={handleUpdateCustomer}
-                />
-              )}
-            </div>
-          )}
+        )}
 
-          {user && (
-            <table>
-              <thead>
-                <tr>
-                  <th>ID</th>
-                  <th>Customer Name</th>
-                  <th>Device info</th>
-                  <th>Device number of months</th>
-                  <th>Device active</th>
-                  <th>Plan</th>
-                  <th>Start date of Subscription</th>
-                  <th>Telephone Number</th>
-                  <th>Contract Length</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr key={user.id}>
-                  <td>{user.id}</td>
-                  <td>
-                    {user.customer.firstName + " " + user.customer.lastName}
-                  </td>
-                  <td>
-                    {user.deviceInfo.device.make +
-                      " " +
-                      user.deviceInfo.device.model}
-                  </td>
-                  <td>
-                    {user.deviceInfo.onNumberOfMonths === null
-                      ? "N/A"
-                      : user.deviceInfo.onNumberOfMonths > 0
-                      ? ` ${user.deviceInfo.onNumberOfMonths}`
-                      : "Invalid number of months"}
-                  </td>
-                  <td>
-                    {user.deviceInfo.isActive === true
-                      ? "Yes"
-                      : user.deviceInfo.isActive === false
-                      ? "No"
-                      : "Unknown"}
-                  </td>
-
-                  <td>{user.customPlan ? "Custom Plan" : user.plan.name}</td>
-                  <td>
-                    {new Date(user.startDate).toLocaleDateString("en-GB")}
-                  </td>
-                  <td>{user.telephoneNumber}</td>
-                  <td>{user.contractLength}</td>
-                </tr>
-              </tbody>
-            </table>
-          )}
-        </div>
-      )}
-    </div>
+        {user ? (
+          <div className={classes.container}>
+            <Typography variant="h5">Customer Subscription Details</Typography>
+            {deviceInfo ? (
+              <TableContainer
+                component={Paper}
+                className={classes.tableContainer}
+              >
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell>ID</TableCell>
+                      <TableCell>Device info</TableCell>
+                      <TableCell>Device number of months</TableCell>
+                      <TableCell>Device active</TableCell>
+                      <TableCell>Plan</TableCell>
+                      <TableCell>Start date of Subscription</TableCell>
+                      <TableCell>Telephone Number</TableCell>
+                      <TableCell>Contract Length</TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    <TableRow key={user.id}>
+                      <TableCell>{user.id}</TableCell>
+                      <TableCell>
+                        {deviceInfo &&
+                          deviceInfo.device &&
+                          deviceInfo.device.make +
+                            " " +
+                            deviceInfo.device.model}
+                      </TableCell>
+                      <TableCell>
+                        {deviceInfo &&
+                        deviceInfo.onNumberOfMonths !== null &&
+                        deviceInfo.onNumberOfMonths !== undefined
+                          ? deviceInfo.onNumberOfMonths
+                          : "N/A"}
+                      </TableCell>
+                      <TableCell>
+                        {deviceInfo &&
+                        deviceInfo.isActive !== null &&
+                        deviceInfo.isActive !== undefined
+                          ? deviceInfo.isActive
+                            ? "Yes"
+                            : "No"
+                          : "Unknown"}
+                      </TableCell>
+                      <TableCell>
+                        {user.customPlanId ? "Custom Plan" : "Existing Plan"}
+                      </TableCell>
+                      <TableCell>
+                        {new Date(user.startDate).toLocaleDateString("en-GB")}
+                      </TableCell>
+                      <TableCell>{user.telephoneNumber}</TableCell>
+                      <TableCell>{user.contractLength}</TableCell>
+                    </TableRow>
+                  </TableBody>
+                </Table>
+              </TableContainer>
+            ) : (
+              <Typography variant="body1">
+                Customer does not have a created subscription.
+              </Typography>
+            )}
+          </div>
+        ) : (
+          <Typography variant="body1">
+            User does not have a subscription.
+          </Typography>
+        )}
+      </div>
+    </ThemeProvider>
   );
 };
 

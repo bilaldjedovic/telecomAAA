@@ -1,7 +1,13 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./ModalForm.css";
-import "./CreateCustomer.css";
+import {
+  Button,
+  FormControl,
+  InputLabel,
+  MenuItem,
+  Select,
+  TextField,
+} from "@mui/material";
 
 const CreateCustomers = ({ onClose, onUpdate }) => {
   const [newCustomer, setNewCustomer] = useState({
@@ -66,9 +72,17 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
 
   const handleCreation = async () => {
     try {
+      const customerToSend = {
+        firstName: newCustomer.firstName,
+        lastName: newCustomer.lastName,
+        locationId: parseInt(newCustomer.location.id),
+        occupationId: parseInt(newCustomer.occupation.id),
+        genderId: parseInt(newCustomer.gender.id),
+        address: newCustomer.address,
+      };
       const response = await axios.post(
         "http://localhost:8080/customer/createCustomer",
-        newCustomer
+        customerToSend
       );
 
       const createdCustomerId = response.data.id;
@@ -86,102 +100,107 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
 
   return (
     <div className="modal-container">
-      <h2>Add Customer</h2>
-      <form>
-        <label>
-          First Name:
-          <input
-            type="text"
-            name="firstName"
-            value={newCustomer.firstName}
-            onChange={handleInputChange}
-            className="form-input"
-          />
-        </label>
-
-        <label>
-          Last Name:
-          <input
-            type="text"
-            name="lastName"
-            value={newCustomer.lastName}
-            onChange={handleInputChange}
-            className="form-input"
-          />
-        </label>
-
-        <select
-          name="location.id"
-          value={newCustomer.location.id}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Location</option>
-          {locations.map((location) => (
-            <option key={location.id} value={location.id}>
-              {location.city}, {location.district}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="occupation.id"
-          value={newCustomer.occupation.id}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Occupation</option>
-          {occupations.map((occupation) => (
-            <option key={occupation.id} value={occupation.id}>
-              {occupation.occupationName}
-            </option>
-          ))}
-        </select>
-
-        <select
-          name="gender.id"
-          value={newCustomer.gender.id}
-          onChange={handleInputChange}
-        >
-          <option value="">Select Gender</option>
-          {genders.map((gender) => (
-            <option key={gender.id} value={gender.id}>
-              {gender.gender}
-            </option>
-          ))}
-        </select>
-        <label>
-          Address:
-          <input
-            type="text"
-            name="address"
-            value={newCustomer.address}
-            onChange={handleInputChange}
-            className="form-input"
-          />
-        </label>
-
-        <button type="button" onClick={handleCreation}>
-          Create Customer
-        </button>
-        <button type="button" onClick={onClose}>
-          Cancel
-        </button>
-      </form>
-
-      {successMessage && (
-        <div className="success-message">{successMessage}</div>
-      )}
-
-      {customerId && (
+      {customerId ? (
         <SubscriptionForm
           customerId={customerId}
           customer={newCustomer}
           onClose={onClose}
         />
+      ) : (
+        <>
+          <h2>Add Customer</h2>
+          <form>
+            <TextField
+              label="First Name"
+              type="text"
+              name="firstName"
+              value={newCustomer.firstName}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <TextField
+              label="Last Name"
+              type="text"
+              name="lastName"
+              value={newCustomer.lastName}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <FormControl>
+              <InputLabel>Select Location</InputLabel>
+              <Select
+                name="location.id"
+                value={newCustomer.location.id}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="">Select Location</MenuItem>
+                {locations.map((location) => (
+                  <MenuItem key={location.id} value={location.id}>
+                    {location.city}, {location.district}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <InputLabel>Select Occupation</InputLabel>
+              <Select
+                name="occupation.id"
+                value={newCustomer.occupation.id}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="">Select Occupation</MenuItem>
+                {occupations.map((occupation) => (
+                  <MenuItem key={occupation.id} value={occupation.id}>
+                    {occupation.occupationName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <FormControl>
+              <InputLabel>Select Gender</InputLabel>
+              <Select
+                name="gender.id"
+                value={newCustomer.gender.id}
+                onChange={handleInputChange}
+              >
+                <MenuItem value="">Select Gender</MenuItem>
+                {genders.map((gender) => (
+                  <MenuItem key={gender.id} value={gender.id}>
+                    {gender.gender}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
+
+            <TextField
+              label="Address"
+              type="text"
+              name="address"
+              value={newCustomer.address}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <Button type="button" onClick={handleCreation}>
+              Create Customer
+            </Button>
+            <Button type="button" onClick={onClose}>
+              Cancel
+            </Button>
+          </form>
+
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+        </>
       )}
     </div>
   );
 };
-
 const SubscriptionForm = ({ customerId, customer, onClose }) => {
   const [subscriptionData, setSubscriptionData] = useState({
     customPlanId: 0,
@@ -212,6 +231,8 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
   const [devices, setDevices] = useState([]);
   const [currentStep, setCurrentStep] = useState(1);
   const [customPlan, setCustomPlan] = useState(null);
+  const [subscriptionSuccessMessage, setSubscriptionSuccessMessage] =
+    useState("");
 
   useEffect(() => {
     const fetchDataSubscription = async () => {
@@ -242,26 +263,44 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
   const handleSubscriptionInputChange = (e) => {
     const { name, value } = e.target;
 
-    const [fieldName, nestedFieldName] = name.split(".");
+    setSubscriptionData((prevState) => {
+      if (name === "deviceInfo.confirm") {
+        return {
+          ...prevState,
+          deviceInfo:
+            value === "yes"
+              ? {
+                  confirm: "yes",
+                  deviceId: "",
+                  onNumberOfMonths: 0,
+                  startDate: "",
+                  isActive: "yes",
+                }
+              : null,
+        };
+      }
 
-    if (nestedFieldName) {
-      setSubscriptionData((prevData) => ({
-        ...prevData,
-        [fieldName]: {
-          ...prevData[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setSubscriptionData((prevData) => ({
-        ...prevData,
-        [fieldName]: value,
-      }));
-    }
+      const nestedField = name.split(".");
+      if (nestedField.length === 2) {
+        const [fieldName, nestedFieldName] = nestedField;
+        return {
+          ...prevState,
+          [fieldName]: {
+            ...prevState[fieldName],
+            [nestedFieldName]: value,
+          },
+        };
+      }
+
+      return {
+        ...prevState,
+        [name]: value,
+      };
+    });
   };
 
   const handleNextStep = async () => {
-    if (currentStep === 1 && subscriptionData.planType === "custom") {
+    if (currentStep === 1) {
       try {
         const response = await axios.post(
           "http://localhost:8080/customPlan/createCustomPlan",
@@ -278,7 +317,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
       } catch (error) {
         console.error("Error creating custom plan: ", error);
       }
-    } else if (currentStep === 2) {
+    } else if (currentStep === 2 && subscriptionData.planType === "custom") {
       try {
         const customPlanServiceData = {
           service: {
@@ -305,7 +344,12 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
       }
     } else if (currentStep === 3) {
       try {
-        if (subscriptionData.deviceInfo.confirm === "yes") {
+        if (subscriptionData.deviceInfo.confirm === "no") {
+          setSubscriptionData((prevData) => ({
+            ...prevData,
+            deviceInfoId: null,
+          }));
+        } else if (subscriptionData.deviceInfo.confirm === "yes") {
           const deviceInfoData = {
             device: {
               id: subscriptionData.deviceInfo.deviceId,
@@ -365,7 +409,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
       let customPlanIdToSend = null;
 
       if (planType === "existing") {
-        planId = selectedPlanId;
+        planId = parseInt(selectedPlanId);
       } else {
         customPlanIdToSend = customPlanId;
       }
@@ -382,6 +426,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
           startDate: startDate,
         }
       );
+      setSubscriptionSuccessMessage("Subscription created successfully!");
 
       onClose();
     } catch (error) {
@@ -395,53 +440,53 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
       <form>
         {currentStep === 1 && (
           <>
-            <label>
-              Plan Type:
-              <select
+            <FormControl>
+              <InputLabel>Plan Type</InputLabel>
+              <Select
                 name="planType"
                 value={subscriptionData.planType}
                 onChange={handleSubscriptionInputChange}
               >
-                <option value="existing">Select Existing Plan</option>
-                <option value="custom">Create Custom Plan</option>
-              </select>
-            </label>
+                <MenuItem value="existing">Select Existing Plan</MenuItem>
+                <MenuItem value="custom">Create Custom Plan</MenuItem>
+              </Select>
+            </FormControl>
 
             {subscriptionData.planType === "existing" && (
-              <select
-                name="selectedPlanId"
-                value={subscriptionData.selectedPlanId}
-                onChange={handleSubscriptionInputChange}
-              >
-                <option value="">Select Plan</option>
-                {plans.map((plan) => (
-                  <option key={plan.id} value={plan.id}>
-                    {plan.name}
-                  </option>
-                ))}
-              </select>
+              <FormControl>
+                <InputLabel>Select Plan</InputLabel>
+                <Select
+                  name="selectedPlanId"
+                  value={subscriptionData.selectedPlanId}
+                  onChange={handleSubscriptionInputChange}
+                >
+                  <MenuItem value="">Select Plan</MenuItem>
+                  {plans.map((plan) => (
+                    <MenuItem key={plan.id} value={plan.id}>
+                      {plan.name}
+                    </MenuItem>
+                  ))}
+                </Select>
+              </FormControl>
             )}
 
             {subscriptionData.planType === "custom" && (
               <div>
-                <label>
-                  Custom Plan Cost Per Month:
-                  <input
-                    type="number"
-                    name="customPlan.costPerMonth"
-                    value={subscriptionData.customPlan.costPerMonth}
-                    onChange={handleSubscriptionInputChange}
-                  />
-                </label>
-                <label>
-                  Custom Plan Minimum Contract Length (months):
-                  <input
-                    type="number"
-                    name="customPlan.minimumContractLength"
-                    value={subscriptionData.customPlan.minimumContractLength}
-                    onChange={handleSubscriptionInputChange}
-                  />
-                </label>
+                <TextField
+                  label="Custom Plan Cost Per Month"
+                  type="number"
+                  name="customPlan.costPerMonth"
+                  value={subscriptionData.customPlan.costPerMonth}
+                  onChange={handleSubscriptionInputChange}
+                />
+
+                <TextField
+                  label="Custom Plan Minimum Contract Length (months)"
+                  type="number"
+                  name="customPlan.minimumContractLength"
+                  value={subscriptionData.customPlan.minimumContractLength}
+                  onChange={handleSubscriptionInputChange}
+                />
               </div>
             )}
           </>
@@ -449,81 +494,84 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
 
         {currentStep === 2 && subscriptionData.planType === "custom" && (
           <div>
-            <select
-              name="selectedServiceId"
-              value={subscriptionData.selectedServiceId}
-              onChange={handleSubscriptionInputChange}
-            >
-              <option value="">Select Service</option>
-              {services.map((service) => (
-                <option key={service.id} value={service.id}>
-                  {service.name}, {service.description}, {service.costPerMonth}
-                </option>
-              ))}
-            </select>
+            <FormControl>
+              <InputLabel>Select Service</InputLabel>
+              <Select
+                name="selectedServiceId"
+                value={subscriptionData.selectedServiceId}
+                onChange={handleSubscriptionInputChange}
+              >
+                <MenuItem value="">Select Service</MenuItem>
+                {services.map((service) => (
+                  <MenuItem key={service.id} value={service.id}>
+                    {service.name}, {service.description},{" "}
+                    {service.costPerMonth}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
           </div>
         )}
 
         {currentStep === 3 && (
           <div>
-            <label>
-              Do you want to add device?
-              <select
+            <FormControl>
+              <InputLabel>Do you want to add device?</InputLabel>
+              <Select
                 name="deviceInfo.confirm"
                 value={subscriptionData.deviceInfo.confirm}
                 onChange={handleSubscriptionInputChange}
               >
-                <option value="yes">Yes</option>
-                <option value="no">No</option>
-              </select>
-            </label>
+                <MenuItem value="yes">Yes</MenuItem>
+                <MenuItem value="no">No</MenuItem>
+              </Select>
+            </FormControl>
 
             {subscriptionData.deviceInfo.confirm === "yes" && (
               <div>
-                <select
-                  name="deviceInfo.deviceId"
-                  value={subscriptionData.deviceInfo.deviceId}
+                <FormControl>
+                  <InputLabel>Select Device</InputLabel>
+                  <Select
+                    name="deviceInfo.deviceId"
+                    value={subscriptionData.deviceInfo.deviceId}
+                    onChange={handleSubscriptionInputChange}
+                  >
+                    <MenuItem value="">Select Device</MenuItem>
+                    {devices.map((device) => (
+                      <MenuItem key={device.id} value={device.id}>
+                        {device.make}, {device.model}, {device.cost}
+                      </MenuItem>
+                    ))}
+                  </Select>
+                </FormControl>
+
+                <TextField
+                  label="On number of months"
+                  type="number"
+                  name="deviceInfo.onNumberOfMonths"
+                  value={subscriptionData.deviceInfo.onNumberOfMonths}
                   onChange={handleSubscriptionInputChange}
-                >
-                  <option value="">Select Device</option>
-                  {devices.map((device) => (
-                    <option key={device.id} value={device.id}>
-                      {device.make}, {device.model}, {device.cost}
-                    </option>
-                  ))}
-                </select>
+                />
 
-                <label>
-                  On number of months:
-                  <input
-                    type="number"
-                    name="deviceInfo.onNumberOfMonths"
-                    value={subscriptionData.deviceInfo.onNumberOfMonths}
-                    onChange={handleSubscriptionInputChange}
-                  />
-                </label>
+                <TextField
+                  label="Start date"
+                  type="date"
+                  name="deviceInfo.startDate"
+                  value={subscriptionData.deviceInfo.startDate}
+                  onChange={handleSubscriptionInputChange}
+                />
 
-                <label>
-                  Start date:
-                  <input
-                    type="date"
-                    name="deviceInfo.startDate"
-                    value={subscriptionData.deviceInfo.startDate}
-                    onChange={handleSubscriptionInputChange}
-                  />
-                </label>
-
-                <label>
-                  Is Active:
-                  <select
+                <FormControl>
+                  <InputLabel>Is Active</InputLabel>
+                  <Select
                     name="deviceInfo.isActive"
                     value={subscriptionData.deviceInfo.isActive}
                     onChange={handleSubscriptionInputChange}
                   >
-                    <option value="yes">Yes</option>
-                    <option value="no">No</option>
-                  </select>
-                </label>
+                    <MenuItem value="yes">Yes</MenuItem>
+                    <MenuItem value="no">No</MenuItem>
+                  </Select>
+                </FormControl>
               </div>
             )}
           </div>
@@ -531,57 +579,55 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
 
         {currentStep === 4 && (
           <div>
-            <label>
-              Telephone Number:
-              <input
-                type="text"
-                name="telephoneNumber"
-                value={subscriptionData.telephoneNumber}
-                onChange={handleSubscriptionInputChange}
-              />
-            </label>
+            <TextField
+              label="Telephone Number"
+              type="text"
+              name="telephoneNumber"
+              value={subscriptionData.telephoneNumber}
+              onChange={handleSubscriptionInputChange}
+            />
 
-            <label>
-              Contract Length:
-              <input
-                type="number"
-                name="contractLength"
-                value={subscriptionData.contractLength}
-                onChange={handleSubscriptionInputChange}
-              />
-            </label>
+            <TextField
+              label="Contract Length"
+              type="number"
+              name="contractLength"
+              value={subscriptionData.contractLength}
+              onChange={handleSubscriptionInputChange}
+            />
 
-            <label>
-              Start date of subscription:
-              <input
-                type="date"
-                name="startDate"
-                value={subscriptionData.startDate}
-                onChange={handleSubscriptionInputChange}
-              />
-            </label>
+            <TextField
+              label="Start date of subscription"
+              type="date"
+              name="startDate"
+              value={subscriptionData.startDate}
+              onChange={handleSubscriptionInputChange}
+            />
           </div>
         )}
 
+        {subscriptionSuccessMessage && (
+          <div className="success-message">{subscriptionSuccessMessage}</div>
+        )}
+
         {currentStep > 1 && (
-          <button type="button" onClick={handlePreviousStep}>
+          <Button type="button" onClick={handlePreviousStep}>
             Previous
-          </button>
+          </Button>
         )}
 
         {currentStep < 4 ? (
-          <button type="button" onClick={handleNextStep}>
+          <Button type="button" onClick={handleNextStep}>
             Next
-          </button>
+          </Button>
         ) : (
-          <button type="button" onClick={handleSubscriptionCreation}>
+          <Button type="button" onClick={handleSubscriptionCreation}>
             Create Subscription
-          </button>
+          </Button>
         )}
 
-        <button type="button" onClick={onClose}>
+        <Button type="button" onClick={onClose}>
           Cancel
-        </button>
+        </Button>
       </form>
     </div>
   );

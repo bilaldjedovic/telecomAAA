@@ -1,6 +1,49 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import "./Home.css";
+import styled from "styled-components";
+
+const Container = styled.div`
+  text-align: center;
+  max-width: 800px;
+  margin: 20px auto;
+`;
+
+const Title = styled.h1`
+  color: #333;
+`;
+
+const NewsList = styled.ul`
+  list-style: none;
+  padding: 0;
+`;
+
+const NewsItem = styled.li`
+  margin-bottom: 30px;
+`;
+
+const Image = styled.img`
+  max-width: 80%;
+  margin-bottom: 10px;
+  display: block;
+  margin: auto;
+`;
+
+const ArticleTitle = styled.h2`
+  color: #444;
+`;
+
+const ArticleDescription = styled.p`
+  color: #666;
+`;
+
+const ReadMoreLink = styled.a`
+  color: #007bff;
+  text-decoration: none;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
 
 const Home = () => {
   const [news, setNews] = useState([]);
@@ -29,32 +72,27 @@ const Home = () => {
   }, []);
 
   return (
-    <div className="container">
-      <h1>Tech News</h1>
-      <ul>
+    <Container>
+      <Title>Tech News</Title>
+      <NewsList>
         {news.map((article) => (
-          <li key={article.title}>
+          <NewsItem key={article.title}>
             {article.urlToImage && (
-              <img
-                src={article.urlToImage}
-                alt={article.title}
-                style={{
-                  maxWidth: "80%",
-                  marginBottom: "10px",
-                  display: "block",
-                  margin: "auto",
-                }}
-              />
+              <Image src={article.urlToImage} alt={article.title} />
             )}
-            <h2>{article.title}</h2>
-            <p>{article.description}</p>
-            <a href={article.url} target="_blank" rel="noopener noreferrer">
+            <ArticleTitle>{article.title}</ArticleTitle>
+            <ArticleDescription>{article.description}</ArticleDescription>
+            <ReadMoreLink
+              href={article.url}
+              target="_blank"
+              rel="noopener noreferrer"
+            >
               Read more
-            </a>
-          </li>
+            </ReadMoreLink>
+          </NewsItem>
         ))}
-      </ul>
-    </div>
+      </NewsList>
+    </Container>
   );
 };
 

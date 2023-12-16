@@ -1,6 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
+import { Button, Typography, TextField } from "@mui/material";
 import axios from "axios";
-import { Button } from "@material-ui/core";
+import "./AddData.css";
+import "./AddRoleComponent.css";
 
 const AddData = () => {
   const [activeModal, setActiveModal] = useState(null);
@@ -14,121 +16,133 @@ const AddData = () => {
   };
 
   return (
-    <div>
-      <h1>ADD DATA</h1>
-      {!activeModal && (
-        <Button onClick={() => openModal("role")}>Add Role</Button>
-      )}
-      {activeModal === "role" && <AddRole onClose={closeModal} />}
+    <div className="add-data-container">
+      <Typography variant="h4" gutterBottom>
+        ADD DATA
+      </Typography>
 
-      {!activeModal && (
-        <Button onClick={() => openModal("occupation")}>Add Occupation</Button>
-      )}
-      {activeModal === "occupation" && <AddOccupation onClose={closeModal} />}
+      <div className="button-container">
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("role")}
+          >
+            Add Role
+          </Button>
+        )}
+        {activeModal === "role" && <AddRoleComponent onClose={closeModal} />}
 
-      {!activeModal && (
-        <Button onClick={() => openModal("location")}>Add Location</Button>
-      )}
-      {activeModal === "location" && <AddLocation onClose={closeModal} />}
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("occupation")}
+          >
+            Add Occupation
+          </Button>
+        )}
+        {activeModal === "occupation" && (
+          <AddOccupationComponent onClose={closeModal} />
+        )}
 
-      {!activeModal && (
-        <Button onClick={() => openModal("service")}>Add Service</Button>
-      )}
-      {activeModal === "service" && <AddService onClose={closeModal} />}
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("location")}
+          >
+            Add Location
+          </Button>
+        )}
+        {activeModal === "location" && (
+          <AddLocationComponent onClose={closeModal} />
+        )}
 
-      {!activeModal && (
-        <Button onClick={() => openModal("device")}>Add Device</Button>
-      )}
-      {activeModal === "device" && <AddDevice onClose={closeModal} />}
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("service")}
+          >
+            Add Service
+          </Button>
+        )}
+        {activeModal === "service" && (
+          <AddServiceComponent onClose={closeModal} />
+        )}
+
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("device")}
+          >
+            Add Device
+          </Button>
+        )}
+        {activeModal === "device" && (
+          <AddDeviceComponent onClose={closeModal} />
+        )}
+      </div>
     </div>
   );
 };
 
-const AddRole = ({ onClose, onUpdate }) => {
+const AddRoleComponent = ({ onClose }) => {
   const [newRole, setNewRole] = useState({
     roleName: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const [fieldName, nestedFieldName] = name.split(".");
-
-    if (nestedFieldName) {
-      setNewRole((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: {
-          ...prevCustomer[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setNewRole((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: value,
-      }));
-    }
+    setNewRole((prevRole) => ({ ...prevRole, [name]: value }));
   };
 
   const handleCreation = async () => {
     try {
       await axios.post("http://localhost:8080/role/createRole", newRole);
-
-      onUpdate(newRole);
       onClose();
-      // Optionally, update your UI state instead of reloading the page
     } catch (error) {
       console.error("Error creating role: ", error);
     }
   };
-
   return (
-    <div>
-      <h2>Add Role</h2>
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Role
+      </Typography>
 
-      <form>
-        <label>
-          Role Name:
-          <input
-            type="text"
-            name="roleName"
-            value={newRole.roleName}
-            onChange={handleInputChange}
-          />
-        </label>
-        <Button type="button" onClick={handleCreation}>
-          Create Role
-        </Button>
-        <Button type="button" onClick={onClose}>
-          Cancel
-        </Button>
+      <form className="form-container">
+        <TextField
+          label="Role Name"
+          variant="outlined"
+          name="roleName"
+          value={newRole.roleName}
+          onChange={handleInputChange}
+        />
+
+        <div className="form-buttons">
+          <Button variant="contained" color="primary" onClick={handleCreation}>
+            Create Role
+          </Button>
+          <Button variant="contained" color="secondary" onClick={onClose}>
+            Cancel
+          </Button>
+        </div>
       </form>
     </div>
   );
 };
 
-const AddOccupation = ({ onClose, onUpdate }) => {
+const AddOccupationComponent = ({ onClose, onUpdate }) => {
   const [newOccupation, setOccupation] = useState({
     occupationName: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const [fieldName, nestedFieldName] = name.split(".");
-
-    if (nestedFieldName) {
-      setOccupation((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: {
-          ...prevCustomer[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setOccupation((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: value,
-      }));
-    }
+    setOccupation((prevOccupation) => ({ ...prevOccupation, [name]: value }));
   };
 
   const handleCreation = async () => {
@@ -147,23 +161,24 @@ const AddOccupation = ({ onClose, onUpdate }) => {
   };
 
   return (
-    <div>
-      <h2>Add Occupation</h2>
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Occupation
+      </Typography>
 
       <form>
-        <label>
-          Occupation Name:
-          <input
-            type="text"
-            name="occupationName"
-            value={newOccupation.occupationName}
-            onChange={handleInputChange}
-          />
-        </label>
-        <Button type="button" onClick={handleCreation}>
+        <TextField
+          label="Occupation Name"
+          variant="outlined"
+          name="occupationName"
+          value={newOccupation.occupationName}
+          onChange={handleInputChange}
+        />
+
+        <Button variant="contained" color="primary" onClick={handleCreation}>
           Create Occupation
         </Button>
-        <Button type="button" onClick={onClose}>
+        <Button variant="contained" color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </form>
@@ -171,30 +186,15 @@ const AddOccupation = ({ onClose, onUpdate }) => {
   );
 };
 
-const AddLocation = ({ onClose, onUpdate }) => {
+const AddLocationComponent = ({ onClose, onUpdate }) => {
   const [newLocation, setLocation] = useState({
     city: "",
     district: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const [fieldName, nestedFieldName] = name.split(".");
-
-    if (nestedFieldName) {
-      setLocation((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: {
-          ...prevCustomer[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      setLocation((prevCustomer) => ({
-        ...prevCustomer,
-        [fieldName]: value,
-      }));
-    }
+    setLocation((prevLocation) => ({ ...prevLocation, [name]: value }));
   };
 
   const handleCreation = async () => {
@@ -213,33 +213,32 @@ const AddLocation = ({ onClose, onUpdate }) => {
   };
 
   return (
-    <div>
-      <h2>Add Location</h2>
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Location
+      </Typography>
 
       <form>
-        <label>
-          City:
-          <input
-            type="text"
-            name="city"
-            value={newLocation.city}
-            onChange={handleInputChange}
-          />
-        </label>
+        <TextField
+          label="City"
+          variant="outlined"
+          name="city"
+          value={newLocation.city}
+          onChange={handleInputChange}
+        />
 
-        <label>
-          District:
-          <input
-            type="text"
-            name="district"
-            value={newLocation.district}
-            onChange={handleInputChange}
-          />
-        </label>
-        <Button type="button" onClick={handleCreation}>
+        <TextField
+          label="District"
+          variant="outlined"
+          name="district"
+          value={newLocation.district}
+          onChange={handleInputChange}
+        />
+
+        <Button variant="contained" color="primary" onClick={handleCreation}>
           Create Location
         </Button>
-        <Button type="button" onClick={onClose}>
+        <Button variant="contained" color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </form>
@@ -247,33 +246,16 @@ const AddLocation = ({ onClose, onUpdate }) => {
   );
 };
 
-const AddService = ({ onClose, onUpdate }) => {
+const AddServiceComponent = ({ onClose, onUpdate }) => {
   const [newService, setService] = useState({
     serviceName: "",
     description: "",
     costPerMonth: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const [fieldName, nestedFieldName] = name.split(".");
-
-    if (nestedFieldName) {
-      setService((prevService) => ({
-        ...prevService,
-        [fieldName]: {
-          ...prevService[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      const newValue = fieldName === "costPerMonth" ? parseFloat(value) : value;
-
-      setService((prevService) => ({
-        ...prevService,
-        [fieldName]: newValue,
-      }));
-    }
+    setService((prevService) => ({ ...prevService, [name]: value }));
   };
 
   const handleCreation = async () => {
@@ -292,42 +274,40 @@ const AddService = ({ onClose, onUpdate }) => {
   };
 
   return (
-    <div>
-      <h2>Add Service</h2>
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Service
+      </Typography>
 
       <form>
-        <label>
-          Service name:
-          <input
-            type="text"
-            name="serviceName"
-            value={newService.serviceName}
-            onChange={handleInputChange}
-          />
-        </label>
+        <TextField
+          label="Service Name"
+          variant="outlined"
+          name="serviceName"
+          value={newService.serviceName}
+          onChange={handleInputChange}
+        />
 
-        <label>
-          Service Description:
-          <textarea
-            name="description"
-            value={newService.description}
-            onChange={handleInputChange}
-          />
-        </label>
+        <TextField
+          label="Description"
+          variant="outlined"
+          name="description"
+          value={newService.description}
+          onChange={handleInputChange}
+        />
 
-        <label>
-          Service cost per month:
-          <input
-            type="number"
-            name="costPerMonth"
-            value={newService.costPerMonth}
-            onChange={handleInputChange}
-          />
-        </label>
-        <Button type="button" onClick={handleCreation}>
+        <TextField
+          label="Cost Per Month"
+          variant="outlined"
+          name="costPerMonth"
+          value={newService.costPerMonth}
+          onChange={handleInputChange}
+        />
+
+        <Button variant="contained" color="primary" onClick={handleCreation}>
           Create Service
         </Button>
-        <Button type="button" onClick={onClose}>
+        <Button variant="contained" color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </form>
@@ -335,42 +315,22 @@ const AddService = ({ onClose, onUpdate }) => {
   );
 };
 
-const AddDevice = ({ onClose, onUpdate }) => {
+const AddDeviceComponent = ({ onClose, onUpdate }) => {
   const [newDevice, setDevice] = useState({
     make: "",
     model: "",
     cost: "",
   });
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-
-    const [fieldName, nestedFieldName] = name.split(".");
-
-    if (nestedFieldName) {
-      setDevice((prevService) => ({
-        ...prevService,
-        [fieldName]: {
-          ...prevService[fieldName],
-          [nestedFieldName]: value,
-        },
-      }));
-    } else {
-      const newValue = fieldName === "cost" ? parseFloat(value) : value;
-
-      setDevice((prevService) => ({
-        ...prevService,
-        [fieldName]: newValue,
-      }));
-    }
+    setDevice((prevDevice) => ({ ...prevDevice, [name]: value }));
   };
 
   const handleCreation = async () => {
     try {
       delete newDevice.name;
-      await axios.post(
-        "http://localhost:8080/service/createService",
-        newDevice
-      );
+      await axios.post("http://localhost:8080/device/createDevice", newDevice);
 
       onUpdate(newDevice);
       onClose();
@@ -380,42 +340,40 @@ const AddDevice = ({ onClose, onUpdate }) => {
   };
 
   return (
-    <div>
-      <h2>Add Device</h2>
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Device
+      </Typography>
 
       <form>
-        <label>
-          Device producer:
-          <input
-            type="text"
-            name="make"
-            value={newDevice.make}
-            onChange={handleInputChange}
-          />
-        </label>
+        <TextField
+          label="Make"
+          variant="outlined"
+          name="make"
+          value={newDevice.make}
+          onChange={handleInputChange}
+        />
 
-        <label>
-          Device model:
-          <textarea
-            name="model"
-            value={newDevice.model}
-            onChange={handleInputChange}
-          />
-        </label>
+        <TextField
+          label="Model"
+          variant="outlined"
+          name="model"
+          value={newDevice.model}
+          onChange={handleInputChange}
+        />
 
-        <label>
-          Device cost:
-          <input
-            type="number"
-            name="cost"
-            value={newDevice.cost}
-            onChange={handleInputChange}
-          />
-        </label>
-        <Button type="button" onClick={handleCreation}>
+        <TextField
+          label="Cost"
+          variant="outlined"
+          name="cost"
+          value={newDevice.cost}
+          onChange={handleInputChange}
+        />
+
+        <Button variant="contained" color="primary" onClick={handleCreation}>
           Create Device
         </Button>
-        <Button type="button" onClick={onClose}>
+        <Button variant="contained" color="secondary" onClick={onClose}>
           Cancel
         </Button>
       </form>

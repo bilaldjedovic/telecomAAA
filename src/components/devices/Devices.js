@@ -1,7 +1,44 @@
+// Devices.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
-import "./Devices.css";
+import styled from "styled-components";
+import "./Devices.css"; // If you have existing styles
+
+const DeviceList = styled.div`
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  max-width: 1200px;
+  margin: 20px auto;
+`;
+
+const DeviceCard = styled(Link)`
+  text-decoration: none;
+  color: inherit;
+  margin: 10px;
+  padding: 15px;
+  border: 1px solid #ddd;
+  border-radius: 8px;
+  width: 200px;
+  text-align: center;
+  transition: transform 0.3s ease;
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 8px;
+  }
+
+  p {
+    margin-top: 10px;
+    font-weight: bold;
+  }
+`;
 
 const Devices = () => {
   const [devices, setDevices] = useState([]);
@@ -32,9 +69,9 @@ const Devices = () => {
   return (
     <div>
       <h2>Phone List</h2>
-      <div className="device-list">
+      <DeviceList>
         {devices.map((device) => (
-          <Link
+          <DeviceCard
             key={device.id}
             to={`/devices/${device.id}`}
             className="device-card-link"
@@ -48,9 +85,9 @@ const Devices = () => {
               />
               <p>{`${device.make} ${device.model}`}</p>
             </div>
-          </Link>
+          </DeviceCard>
         ))}
-      </div>
+      </DeviceList>
     </div>
   );
 };
