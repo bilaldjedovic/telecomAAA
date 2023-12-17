@@ -4,6 +4,9 @@ import { Link } from "react-router-dom";
 import styled from "styled-components";
 import "./Plans.css";
 
+import { useAuth } from "../login/AuthContext";
+import { useNavigate } from "react-router-dom";
+
 const PlanList = styled.div`
   display: flex;
   flex-wrap: wrap;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./Rating.css";
+import { useAuth } from "../login/AuthContext";
 
 import { FaStar } from "react-icons/fa";
 
@@ -10,8 +11,10 @@ const colors = {
 };
 
 const Rating = () => {
+  const { authenticated, role, customerId } = useAuth();
+
   const [review, setReview] = useState({
-    customerId: 1,
+    customerId: customerId,
     feedbackDate: new Date().toISOString().split("T")[0],
     rating: 0,
     feedbackText: "",

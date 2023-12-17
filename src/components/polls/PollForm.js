@@ -2,6 +2,9 @@ import React, { useState } from "react";
 import "./PollForm.css";
 import styled from "styled-components";
 
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../login/AuthContext";
+
 const CenteredContainer = styled.div`
   display: flex;
   align-items: center;
@@ -54,7 +57,8 @@ const ThankYouMessage = styled.p`
 `;
 
 const PollForm = () => {
-  const [customerId, setCustomerId] = useState("");
+  const { authenticated, role, customerId } = useAuth();
+
   const [questions, setQuestions] = useState([
     "How would you rate our network coverage?",
     "How satisfied are you with our customer service?",
@@ -67,10 +71,15 @@ const PollForm = () => {
   const [answers, setAnswers] = useState([]);
   const [currentAnswer, setCurrentAnswer] = useState("");
   const [showThankYou, setShowThankYou] = useState(false);
-
+  const navigate = useNavigate();
   const handleInputChange = (e) => {
     setCurrentAnswer(e.target.value);
   };
+
+  if (!authenticated || role !== 2) {
+    navigate("/login");
+    return null;
+  }
 
   const submitAnswer = () => {
     fetch("http://localhost:8080/poll/createPoll", {
@@ -79,7 +88,7 @@ const PollForm = () => {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        customerId: 2,
+        customerId: customerId,
         question: questions[currentQuestionIndex],
         answer: currentAnswer,
       }),

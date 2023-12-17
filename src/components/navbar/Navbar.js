@@ -7,6 +7,7 @@ import Toolbar from "@material-ui/core/Toolbar";
 import { Link, useLocation } from "react-router-dom";
 
 import logoImage from "./bbHTelecom.png";
+import Logout from "../login/Logout";
 
 const useStyles = makeStyles((theme) => ({
   AppBar: {
@@ -52,7 +53,8 @@ const Navbar = () => {
 
   const getCurrentTabIndex = () => {
     const currentPath = location.pathname;
-    return paths.indexOf(currentPath);
+    const index = paths.indexOf(currentPath);
+    return index !== -1 ? index : 0;
   };
 
   return (
@@ -170,6 +172,8 @@ const Navbar = () => {
                 getCurrentTabIndex() === 10 ? classes.activeTab : ""
               }`}
             />
+
+            <Logout />
           </Tabs>
         </Toolbar>
       </AppBar>

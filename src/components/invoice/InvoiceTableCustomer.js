@@ -10,6 +10,7 @@ import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
 import styled from "styled-components";
+import { useAuth } from "../login/AuthContext";
 
 const StyledContainer = styled.div`
   margin: 20px;
@@ -44,10 +45,13 @@ const InvoiceCustomerTable = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const navigate = useNavigate();
+  const { authenticated, role, customerId } = useAuth();
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/invoice/getInvoicesByCustomerId/2")
+      .get(
+        `http://localhost:8080/invoice/getInvoicesByCustomerId/${customerId}`
+      )
       .then((response) => {
         setInvoice(response.data);
         setLoading(false);
