@@ -17,7 +17,7 @@ const useStyles = makeStyles((theme) => ({
   },
   Toolbar: {
     display: "flex",
-    justifyContent: "space-between",
+    justifyContent: "center", 
   },
   menuLink: {
     color: "#2196f3",
