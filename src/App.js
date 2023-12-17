@@ -27,6 +27,7 @@ import InvoiceTable from "./components/invoice/InvoiceTable";
 import InvoiceDetails from "./components/invoice/InvoiceDetails";
 import Navbar from "./components/navbar/Navbar";
 import Rating from "./components/rating/Rating";
+import CustomerSubscription from "./components/customerSubscription/CustomerSubscription";
 
 const App = () => {
   const { authenticated, role } = useAuth();
@@ -54,6 +55,17 @@ const App = () => {
             element={
               authenticated && role === 2 ? (
                 <Rating />
+              ) : (
+                <Navigate to="/login" />
+              )
+            }
+          />
+
+          <Route
+            path="/subscription"
+            element={
+              authenticated && role === 2 ? (
+                <CustomerSubscription />
               ) : (
                 <Navigate to="/login" />
               )

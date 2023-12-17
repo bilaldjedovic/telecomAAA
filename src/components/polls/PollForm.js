@@ -9,7 +9,7 @@ const CenteredContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 100vh; /* Adjust as needed */
+  height: 100vh; 
 `;
 
 const PollFormContainer = styled.div`
