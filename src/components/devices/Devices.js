@@ -1,9 +1,8 @@
-// Devices.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import "./Devices.css"; // If you have existing styles
+import "./Devices.css";
 
 const DeviceList = styled.div`
   display: flex;

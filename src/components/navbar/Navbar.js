@@ -19,8 +19,8 @@ const useStyles = makeStyles((theme) => ({
   menuLink: {
     color: "#2196f3",
     textDecoration: "none",
-    marginLeft: "20px",
-    fontSize: "16px",
+    marginLeft: "15px",
+    fontSize: "11px",
   },
   activeTab: {
     textDecoration: "underline",
@@ -42,9 +42,9 @@ const Navbar = () => {
     "/devices",
     "/plans",
     "/invoices",
-    "/createCustomers",
     "/addData",
     "/feedback",
+    "/feedbacks",
   ];
 
   const getCurrentTabIndex = () => {
@@ -115,19 +115,11 @@ const Navbar = () => {
             />
 
             <Tab
-              label="Create Customers"
-              component={Link}
-              to="/createCustomers"
-              className={`${classes.menuLink} ${
-                getCurrentTabIndex() === 6 ? classes.activeTab : ""
-              }`}
-            />
-            <Tab
               label="Add Data"
               component={Link}
               to="/addData"
               className={`${classes.menuLink} ${
-                getCurrentTabIndex() === 7 ? classes.activeTab : ""
+                getCurrentTabIndex() === 6 ? classes.activeTab : ""
               }`}
             />
 
@@ -135,6 +127,15 @@ const Navbar = () => {
               label="Feedback"
               component={Link}
               to="/feedback"
+              className={`${classes.menuLink} ${
+                getCurrentTabIndex() === 7 ? classes.activeTab : ""
+              }`}
+            />
+
+            <Tab
+              label="Feedbacks"
+              component={Link}
+              to="/feedbacks"
               className={`${classes.menuLink} ${
                 getCurrentTabIndex() === 8 ? classes.activeTab : ""
               }`}

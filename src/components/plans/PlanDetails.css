@@ -1,8 +1,7 @@
-/* PlanDetails.css */
 .plan-details-container {
   display: flex;
   justify-content: space-around;
-  align-items: flex-start; /* Align items to the top */
+  align-items: flex-start;
   margin: 20px;
   padding: 20px;
   border: 1px solid #ccc;
@@ -32,8 +31,8 @@
   margin-top: 10px;
   white-space: pre-wrap;
   line-height: 1.5;
-  max-width: 100%; /* Ensure the pre element doesn't overflow */
-  overflow: auto; /* Add scrolling for long descriptions */
+  max-width: 100%;
+  overflow: auto;
 }
 
 .loading-message,

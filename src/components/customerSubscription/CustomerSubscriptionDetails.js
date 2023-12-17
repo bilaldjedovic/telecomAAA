@@ -8,7 +8,6 @@ import {
   TableBody,
   TableCell,
   TableContainer,
-  TableHead,
   TableRow,
   Typography,
 } from "@mui/material";
@@ -32,7 +31,6 @@ const CustomerSubscriptionDetails = () => {
         console.log("SubscriptionData Response data:", subscriptionData.data);
         setSubscription(subscriptionData.data);
 
-        // Check if data exists and has deviceInfoId
         if (subscriptionData.data && subscriptionData.data.customerId) {
           const customerResponse = await axios.get(
             `http://localhost:8080/customer/getCustomerById/${subscriptionData.data.customerId}`
@@ -156,7 +154,7 @@ const CustomerSubscriptionDetails = () => {
                 Plan
               </TableCell>
               <TableCell>
-                {subscription.customPlan ? "Custom Plan" : "Telecom plan plan"}
+                {subscription.customPlan ? "Custom Plan" : "Telecom plan"}
               </TableCell>
             </TableRow>
             <TableRow>

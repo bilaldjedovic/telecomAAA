@@ -1,5 +1,3 @@
-/* AddData.css */
-
 .add-data-container {
   display: flex;
   flex-direction: column;
@@ -41,13 +39,11 @@ h4 {
   margin-bottom: 20px;
 }
 
-/* Common styles for buttons */
 button {
   margin-top: 10px;
   cursor: pointer;
 }
 
-/* Role-specific styles */
 .role-buttons {
   display: flex;
   gap: 10px;

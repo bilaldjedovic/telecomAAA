@@ -55,7 +55,7 @@ const Home = () => {
           "https://newsapi.org/v2/top-headlines",
           {
             params: {
-              apiKey: "f129dd740c1d4657a8d96f3e4890679a", // Replace with your API key
+              apiKey: "f129dd740c1d4657a8d96f3e4890679a",
               country: "us",
               category: "technology",
             },

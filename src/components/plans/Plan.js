@@ -1,9 +1,8 @@
-// Plan.js
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import "./Plans.css"; // If you have existing styles
+import "./Plans.css";
 
 const PlanList = styled.div`
   display: flex;

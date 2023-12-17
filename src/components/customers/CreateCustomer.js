@@ -322,7 +322,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
         const customPlanServiceData = {
           service: {
             id: subscriptionData.selectedServiceId,
-            serviceName: "", // Fill in the details based on your service selection
+            serviceName: "",
             description: "",
             costPerMonth: 0,
           },

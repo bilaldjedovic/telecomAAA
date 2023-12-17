@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import { Form, Button, Alert } from "react-bootstrap";
 import "./Rating.css";
 
+import { FaStar } from "react-icons/fa";
+
+const colors = {
+  orange: "#FFBA5A",
+  grey: "#a9a9a9",
+};
+
 const Rating = () => {
   const [review, setReview] = useState({
     customerId: 1,
@@ -10,12 +17,56 @@ const Rating = () => {
     feedbackText: "",
   });
   const [isSuccess, setIsSuccess] = useState(false);
+  const [currentValue, setCurrentValue] = useState(0);
+  const [hoverValue, setHoverValue] = useState(undefined);
+  const stars = Array(5).fill(0);
 
-  const handleRatingChange = (e) => {
+  const handleClick = (value) => {
+    setCurrentValue(value);
     setReview((prevReview) => ({
       ...prevReview,
-      rating: parseInt(e.target.value),
+      rating: value,
     }));
+  };
+
+  const handleMouseOver = (newHoverValue) => {
+    setHoverValue(newHoverValue);
+  };
+
+  const handleMouseLeave = () => {
+    setHoverValue(undefined);
+  };
+
+  const styles = {
+    container: {
+      display: "flex",
+      flexDirection: "column",
+      alignItems: "center",
+    },
+    stars: {
+      display: "flex",
+      flexDirection: "row",
+      marginBottom: 20,
+    },
+    star: {
+      fontSize: 24,
+      marginRight: 10,
+      cursor: "pointer",
+    },
+    textarea: {
+      border: "1px solid #a9a9a9",
+      borderRadius: 5,
+      padding: 10,
+      margin: "20px 0",
+      minHeight: 100,
+      width: 300,
+    },
+    button: {
+      border: "1px solid #a9a9a9",
+      borderRadius: 5,
+      width: 300,
+      padding: 10,
+    },
   };
 
   const handleMessageChange = (e) => {
@@ -37,9 +88,6 @@ const Rating = () => {
     })
       .then((response) => {
         if (response.ok) {
-          console.log("Feedback submitted successfully!");
-
-          // Clear rating and feedback text
           setReview({
             ...review,
             rating: 0,
@@ -48,7 +96,6 @@ const Rating = () => {
 
           setIsSuccess(true);
 
-          // Reset success message after a delay
           setTimeout(() => {
             setIsSuccess(false);
           }, 3000);
@@ -62,48 +109,45 @@ const Rating = () => {
   };
 
   return (
-    <div className="feedback-container">
-      <div className="feedback-box">
+    <div style={styles.container}>
+      <div style={{ marginBottom: 20 }}>
         <h1>Customer Feedback</h1>
         {isSuccess && (
           <Alert variant="success">Feedback sent successfully!</Alert>
         )}
-        <Form>
-          <Form.Group controlId="ratingSelect">
-            <Form.Label>Rate our service:</Form.Label>
-            <Form.Control
-              as="select"
-              value={review.rating}
-              onChange={handleRatingChange}
-            >
-              <option value="0">Select rating</option>
-              <option value="1">⭐</option>
-              <option value="2">⭐⭐</option>
-              <option value="3">⭐⭐⭐</option>
-              <option value="4">⭐⭐⭐⭐</option>
-              <option value="5">⭐⭐⭐⭐⭐</option>
-            </Form.Control>
-          </Form.Group>
-
-          <Form.Group controlId="feedbackTextarea">
-            <Form.Label>Leave a short message:</Form.Label>
-            <Form.Control
-              as="textarea"
-              value={review.feedbackText}
-              onChange={handleMessageChange}
-              placeholder="Your feedback..."
-            />
-          </Form.Group>
-
-          <Button
-            variant="primary"
-            onClick={handleSubmit}
-            disabled={review.feedbackText === "" || review.rating === 0}
-          >
-            Submit Feedback
-          </Button>
-        </Form>
       </div>
+
+      <div style={styles.stars}>
+        {stars.map((_, index) => (
+          <FaStar
+            key={index}
+            size={24}
+            onClick={() => handleClick(index + 1)}
+            onMouseOver={() => handleMouseOver(index + 1)}
+            onMouseLeave={handleMouseLeave}
+            color={
+              (hoverValue || currentValue) > index ? colors.orange : colors.grey
+            }
+            style={styles.star}
+          />
+        ))}
+      </div>
+
+      <textarea
+        value={review.feedbackText}
+        onChange={handleMessageChange}
+        placeholder="Your feedback..."
+        style={styles.textarea}
+      />
+
+      <Button
+        variant="primary"
+        onClick={handleSubmit}
+        disabled={review.feedbackText === "" || review.rating === 0}
+        style={styles.button}
+      >
+        Submit Feedback
+      </Button>
     </div>
   );
 };

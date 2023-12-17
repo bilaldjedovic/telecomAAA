@@ -12,8 +12,7 @@ import TextField from "@mui/material/TextField";
 import Paper from "@material-ui/core/Paper";
 import { makeStyles } from "@material-ui/core/styles";
 
-import "./CustomersTable.css"; // Import CSS file for additional styling
-
+import "./CustomersTable.css";
 const useStyles = makeStyles((theme) => ({
   container: {
     margin: 10,

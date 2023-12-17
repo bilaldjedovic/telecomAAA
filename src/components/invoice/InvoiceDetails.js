@@ -42,8 +42,6 @@ const StyledContainer = styled.div`
       margin-bottom: 20px;
 
       .logo {
-        width: 100px;
-        height: 100px;
         object-fit: contain;
         margin-right: 20px;
       }
@@ -122,7 +120,13 @@ const InvoiceDetails = () => {
 
         <div className="printable-content" id="printable-content">
           <div className="header">
-            <img alt="logo" src={logoImage} className="logo" />
+            <img
+              alt="logo"
+              src={logoImage}
+              className="logo"
+              width={150}
+              height={150}
+            />
             <div className="address">
               <p>
                 Dionicko drustvo BB Telecom Sarajevo Ulica Izmisljena 65,

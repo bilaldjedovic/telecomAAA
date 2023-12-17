@@ -16,6 +16,7 @@ import CreateCustomers from "./components/customers/CreateCustomer";
 import AddData from "./components/addData/AddData";
 import Rating from "./components/rating/Rating";
 import Home from "./components/home/Home";
+import FeedbacksTable from "./components/feedbacks/Feedback";
 
 const App = () => {
   return (
@@ -46,6 +47,7 @@ const App = () => {
           <Route path="/createCustomers" element={<CreateCustomers />} />
           <Route path="/addData" element={<AddData />} />
           <Route path="/feedback" element={<Rating />} />
+          <Route path="/feedbacks" element={<FeedbacksTable />} />
         </Routes>
       </div>
     </Router>

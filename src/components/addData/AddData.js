@@ -154,7 +154,6 @@ const AddOccupationComponent = ({ onClose, onUpdate }) => {
 
       onUpdate(newOccupation);
       onClose();
-      // Optionally, update your UI state instead of reloading the page
     } catch (error) {
       console.error("Error creating occupation: ", error);
     }
@@ -206,7 +205,6 @@ const AddLocationComponent = ({ onClose, onUpdate }) => {
 
       onUpdate(newLocation);
       onClose();
-      // Optionally, update your UI state instead of reloading the page
     } catch (error) {
       console.error("Error creating location: ", error);
     }
