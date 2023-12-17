@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useLocation, Link } from "react-router-dom";
 import styled from "styled-components";
-import { Button } from "@mui/material";
-
+import { Button, Modal, TextField } from "@mui/material";
 import logoImage from "./bbHTelecom.png";
+import ReactModal from "react-modal";
 
 const StyledContainer = styled.div`
   display: flex;
@@ -67,13 +67,90 @@ const StyledContainer = styled.div`
   }
 `;
 
+const PaymentModalContainer = styled.div`
+  max-width: 400px;
+  margin: auto;
+  padding: 20px;
+  background-color: #fff;
+  border-radius: 8px;
+  box-shadow: 0px 0px 15px rgba(0, 0, 0, 0.1);
+
+  h2 {
+    text-align: center;
+  }
+
+  .form-field {
+    margin-bottom: 20px;
+  }
+
+  /* New styles for brighter fields */
+  .bright-input {
+    background-color: #f0f0f0;
+    color: #333;
+  }
+
+  .button-container {
+    display: flex;
+    justify-content: flex-end;
+
+    button {
+      margin-left: 10px;
+    }
+  }
+`;
+
 const InvoiceDetails = () => {
   const [invoice, setInvoice] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [paymentSuccess, setPaymentSuccess] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [cardNumber, setCardNumber] = useState("");
+  const [expirationDate, setExpirationDate] = useState("");
+  const [cvv, setCvv] = useState("");
+  const [validationError, setValidationError] = useState("");
 
   const { state } = useLocation();
   const { invoId } = state;
+
+  const handlePay = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleModalClose = () => {
+    // Validate credit card information
+    if (!cardNumber || cardNumber.length !== 16) {
+      setValidationError("Please enter a valid 16-digit card number.");
+      return;
+    }
+
+    if (!expirationDate.match(/^\d{4}\/\d{2}$/)) {
+      setValidationError("Please enter a valid expiration date (YYYY/MM).");
+      return;
+    }
+
+    if (!cvv || cvv.length !== 3) {
+      setValidationError("Please enter a valid 3-digit CVV number.");
+      return;
+    }
+
+    // If all validations pass, close the modal and simulate a successful payment
+    setValidationError("");
+    setIsModalOpen(false);
+    setPaymentSuccess(true);
+
+    // Update the invoice status to "Pending"
+    axios
+      .put(`http://localhost:8080/invoice/updateInvoice/${invoId}`, {
+        invoiceStatus: "Pending",
+      })
+      .then((response) => {
+        console.log("Invoice status updated successfully:", response.data);
+      })
+      .catch((error) => {
+        console.error("Error updating invoice status:", error);
+      });
+  };
 
   useEffect(() => {
     axios
@@ -111,10 +188,6 @@ const InvoiceDetails = () => {
 
   return (
     <StyledContainer>
-      <Link to={"/invoices"} className="back-button">
-        <Button>Back</Button>
-      </Link>
-
       <div className="device-text">
         <h1 className="device-details-heading">Invoice Details</h1>
 
@@ -175,8 +248,80 @@ const InvoiceDetails = () => {
 
         <div className="button-container">
           <Button onClick={handlePrint}>Print Invoice</Button>
+          {!paymentSuccess && <Button onClick={handlePay}>Pay Invoice</Button>}
         </div>
       </div>
+
+      <ReactModal
+        isOpen={isModalOpen}
+        onRequestClose={() => {
+          setIsModalOpen(false);
+          setValidationError("");
+        }}
+        contentLabel="Payment Modal"
+      >
+        <PaymentModalContainer>
+          <h2>Enter Payment Information</h2>
+
+          {validationError && (
+            <p style={{ color: "red", textAlign: "center" }}>
+              {validationError}
+            </p>
+          )}
+
+          <TextField
+            label="Customer First Name"
+            className={`form-field bright-input`}
+            value={invoice[0].customerFirstName}
+            disabled
+          />
+
+          <TextField
+            label="Customer Last Name"
+            className={`form-field bright-input`}
+            value={invoice[0].customerLastName}
+            disabled
+          />
+
+          <TextField
+            label="Customer Address"
+            className={`form-field black-input`}
+            value={invoice[0].customerAddress}
+            disabled
+          />
+
+          <TextField
+            label="Card Number"
+            className="form-field"
+            value={cardNumber}
+            onChange={(e) => setCardNumber(e.target.value)}
+          />
+
+          <TextField
+            label="Expiration Date (YYYY/MM)"
+            className="form-field"
+            value={expirationDate}
+            onChange={(e) => setExpirationDate(e.target.value)}
+          />
+
+          <TextField
+            label="CVV"
+            className="form-field"
+            value={cvv}
+            onChange={(e) => setCvv(e.target.value)}
+          />
+
+          <div className="button-container">
+            <Button
+              onClick={handleModalClose}
+              variant="contained"
+              color="primary"
+            >
+              Confirm Payment
+            </Button>
+          </div>
+        </PaymentModalContainer>
+      </ReactModal>
     </StyledContainer>
   );
 };

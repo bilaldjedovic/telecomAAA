@@ -17,6 +17,9 @@ import AddData from "./components/addData/AddData";
 import Rating from "./components/rating/Rating";
 import Home from "./components/home/Home";
 import FeedbacksTable from "./components/feedbacks/Feedback";
+import PollForm from "./components/polls/PollForm";
+import PollAnswers from "./components/polls/PollAnswers";
+import InvoiceCustomerTable from "./components/invoice/InvoiceTableCustomer";
 
 const App = () => {
   return (
@@ -48,6 +51,10 @@ const App = () => {
           <Route path="/addData" element={<AddData />} />
           <Route path="/feedback" element={<Rating />} />
           <Route path="/feedbacks" element={<FeedbacksTable />} />
+          <Route path="/pollForm" element={<PollForm />} />
+          <Route path="/pollAnswers" element={<PollAnswers />} />
+
+          <Route path="/customerInvoices" element={<InvoiceCustomerTable />} />
         </Routes>
       </div>
     </Router>

@@ -9,7 +9,6 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
-import TextField from "@mui/material/TextField";
 import styled from "styled-components";
 
 const StyledContainer = styled.div`
@@ -40,17 +39,15 @@ const StyledContainer = styled.div`
   }
 `;
 
-const InvoiceTable = () => {
+const InvoiceCustomerTable = () => {
   const [invoices, setInvoice] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filterName, setFilterName] = useState("");
-  const [filterLastName, setFilterLastName] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     axios
-      .get("http://localhost:8080/invoice/getAllInvoices")
+      .get("http://localhost:8080/invoice/getInvoicesByCustomerId/2")
       .then((response) => {
         setInvoice(response.data);
         setLoading(false);
@@ -62,7 +59,7 @@ const InvoiceTable = () => {
   }, []);
 
   const handleEdit = (invoice) => {
-    navigate("/invoice/details", { state: { invoId: invoice } });
+    navigate("/invoice/details", { state: { invoId: invoice.invoiceId } });
   };
 
   if (loading) {
@@ -76,22 +73,6 @@ const InvoiceTable = () => {
   return (
     <StyledContainer>
       <h2>Invoice List</h2>
-
-      <div className="filterInputs">
-        <TextField
-          id="filterName"
-          label="Filter by Name"
-          value={filterName}
-          onChange={(e) => setFilterName(e.target.value)}
-        />
-
-        <TextField
-          id="filterLastName"
-          label="Filter by Last Name"
-          value={filterLastName}
-          onChange={(e) => setFilterLastName(e.target.value)}
-        />
-      </div>
 
       <TableContainer component={Paper}>
         <Table>
@@ -109,24 +90,28 @@ const InvoiceTable = () => {
           </TableHead>
           <TableBody>
             {invoices.map((invoice) => (
-              <TableRow key={invoice.id}>
-                <TableCell>{invoice.id}</TableCell>
-                <TableCell>{`${
-                  invoice.firstName + " " + invoice.lastName
-                } `}</TableCell>
-                <TableCell>{invoice.address}</TableCell>
+              <TableRow key={invoice.invoiceId}>
+                <TableCell>{invoice.invoiceId}</TableCell>
+                <TableCell>{`${invoice.customerFirstName} ${invoice.customerLastName}`}</TableCell>
+                <TableCell>{invoice.customerAddress}</TableCell>
                 <TableCell>{invoice.totalCost}</TableCell>
                 <TableCell>
-                  {new Date(invoice.dueDate).toLocaleDateString("en-GB")}
+                  {invoice.dueDate &&
+                    new Date(invoice.dueDate).toLocaleDateString("en-GB")}
                 </TableCell>
                 <TableCell>
-                  {new Date(invoice.invoiceDate).toLocaleDateString("en-GB")}
+                  {invoice.invoiceDate &&
+                    new Date(invoice.invoiceDate).toLocaleDateString("en-GB")}
                 </TableCell>
-                <TableCell className={`status-${invoice.status.toLowerCase()}`}>
-                  {invoice.status}
+                <TableCell
+                  className={`status-${(
+                    invoice.invoiceStatus || ""
+                  ).toLowerCase()}`}
+                >
+                  {invoice.invoiceStatus}
                 </TableCell>
                 <TableCell>
-                  <Button onClick={() => handleEdit(invoice.id)}>View</Button>
+                  <Button onClick={() => handleEdit(invoice)}>View</Button>
                 </TableCell>
               </TableRow>
             ))}
@@ -137,4 +122,4 @@ const InvoiceTable = () => {
   );
 };
 
-export default InvoiceTable;
+export default InvoiceCustomerTable;

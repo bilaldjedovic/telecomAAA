@@ -84,6 +84,17 @@ const AddData = () => {
         {activeModal === "device" && (
           <AddDeviceComponent onClose={closeModal} />
         )}
+
+        {!activeModal && (
+          <Button
+            variant="contained"
+            color="primary"
+            onClick={() => openModal("plan")}
+          >
+            Add Plan
+          </Button>
+        )}
+        {activeModal === "plan" && <AddPlanComponent onClose={closeModal} />}
       </div>
     </div>
   );
@@ -152,7 +163,6 @@ const AddOccupationComponent = ({ onClose, onUpdate }) => {
         newOccupation
       );
 
-      onUpdate(newOccupation);
       onClose();
     } catch (error) {
       console.error("Error creating occupation: ", error);
@@ -203,7 +213,6 @@ const AddLocationComponent = ({ onClose, onUpdate }) => {
         newLocation
       );
 
-      onUpdate(newLocation);
       onClose();
     } catch (error) {
       console.error("Error creating location: ", error);
@@ -244,7 +253,7 @@ const AddLocationComponent = ({ onClose, onUpdate }) => {
   );
 };
 
-const AddServiceComponent = ({ onClose, onUpdate }) => {
+const AddServiceComponent = ({ onClose }) => {
   const [newService, setService] = useState({
     serviceName: "",
     description: "",
@@ -259,12 +268,17 @@ const AddServiceComponent = ({ onClose, onUpdate }) => {
   const handleCreation = async () => {
     try {
       delete newService.name;
+
+      const serviceToSent = {
+        serviceName: newService.serviceName,
+        description: newService.description,
+        costPerMonth: parseInt(newService.costPerMonth),
+      };
       await axios.post(
         "http://localhost:8080/service/createService",
-        newService
+        serviceToSent
       );
 
-      onUpdate(newService);
       onClose();
     } catch (error) {
       console.error("Error creating service: ", error);
@@ -298,6 +312,7 @@ const AddServiceComponent = ({ onClose, onUpdate }) => {
           label="Cost Per Month"
           variant="outlined"
           name="costPerMonth"
+          type="number"
           value={newService.costPerMonth}
           onChange={handleInputChange}
         />
@@ -328,9 +343,17 @@ const AddDeviceComponent = ({ onClose, onUpdate }) => {
   const handleCreation = async () => {
     try {
       delete newDevice.name;
-      await axios.post("http://localhost:8080/device/createDevice", newDevice);
 
-      onUpdate(newDevice);
+      const deviceToSent = {
+        make: newDevice.make,
+        model: newDevice.model,
+        cost: parseFloat(newDevice.cost),
+      };
+      await axios.post(
+        "http://localhost:8080/device/createDevice",
+        deviceToSent
+      );
+
       onClose();
     } catch (error) {
       console.error("Error creating device: ", error);
@@ -364,12 +387,84 @@ const AddDeviceComponent = ({ onClose, onUpdate }) => {
           label="Cost"
           variant="outlined"
           name="cost"
+          type="number"
           value={newDevice.cost}
           onChange={handleInputChange}
         />
 
         <Button variant="contained" color="primary" onClick={handleCreation}>
           Create Device
+        </Button>
+        <Button variant="contained" color="secondary" onClick={onClose}>
+          Cancel
+        </Button>
+      </form>
+    </div>
+  );
+};
+
+const AddPlanComponent = ({ onClose }) => {
+  const [newPlan, setPlan] = useState({
+    name: "",
+    costPerMonth: "",
+    minimumContractLength: "",
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setPlan((prevPlan) => ({ ...prevPlan, [name]: value }));
+  };
+
+  const handleCreation = async () => {
+    try {
+      const planToSent = {
+        name: newPlan.name,
+        costPerMonth: parseInt(newPlan.costPerMonth),
+        minimumContractLength: parseInt(newPlan.minimumContractLength),
+      };
+      await axios.post("http://localhost:8080/plan/createPlan", planToSent);
+
+      onClose();
+    } catch (error) {
+      console.error("Error creating plan: ", error);
+    }
+  };
+
+  return (
+    <div className="modal-container">
+      <Typography variant="h6" gutterBottom>
+        Add Plan
+      </Typography>
+
+      <form>
+        <TextField
+          label="Name"
+          variant="outlined"
+          name="name"
+          value={newPlan.name}
+          onChange={handleInputChange}
+        />
+
+        <TextField
+          label="Cost Per Month"
+          variant="outlined"
+          name="costPerMonth"
+          type="number"
+          value={newPlan.costPerMonth}
+          onChange={handleInputChange}
+        />
+
+        <TextField
+          label="Minimum Contract Length(in months)"
+          variant="outlined"
+          name="minimumContractLength"
+          type="number"
+          value={newPlan.minimumContractLength}
+          onChange={handleInputChange}
+        />
+
+        <Button variant="contained" color="primary" onClick={handleCreation}>
+          Create Plan
         </Button>
         <Button variant="contained" color="secondary" onClick={onClose}>
           Cancel

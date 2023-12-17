@@ -1,0 +1,17 @@
+.MuiTablePagination-input {
+  font-size: 12px;
+  padding: 8px;
+}
+
+.MuiTablePagination-actions {
+  flex-shrink: 0;
+  margin-left: 16px;
+}
+
+.MuiTablePagination-caption {
+  font-size: 12px;
+}
+
+.MuiSelect-select {
+  padding: 8px;
+}

@@ -45,6 +45,9 @@ const Navbar = () => {
     "/addData",
     "/feedback",
     "/feedbacks",
+    "/pollForm",
+    "/pollAnswers",
+    "/customerInvoices",
   ];
 
   const getCurrentTabIndex = () => {
@@ -138,6 +141,33 @@ const Navbar = () => {
               to="/feedbacks"
               className={`${classes.menuLink} ${
                 getCurrentTabIndex() === 8 ? classes.activeTab : ""
+              }`}
+            />
+
+            <Tab
+              label="Poll Form"
+              component={Link}
+              to="/pollForm"
+              className={`${classes.menuLink} ${
+                getCurrentTabIndex() === 9 ? classes.activeTab : ""
+              }`}
+            />
+
+            <Tab
+              label="Poll Answers"
+              component={Link}
+              to="/pollAnswers"
+              className={`${classes.menuLink} ${
+                getCurrentTabIndex() === 10 ? classes.activeTab : ""
+              }`}
+            />
+
+            <Tab
+              label="Customer Invoices"
+              component={Link}
+              to="/customerInvoices"
+              className={`${classes.menuLink} ${
+                getCurrentTabIndex() === 10 ? classes.activeTab : ""
               }`}
             />
           </Tabs>
