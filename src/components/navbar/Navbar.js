@@ -8,6 +8,8 @@ import { Link, useLocation } from "react-router-dom";
 
 import logoImage from "./bbHTelecom.png";
 import Logout from "../login/Logout";
+import { useAuth } from '../login/AuthContext';
+
 
 const useStyles = makeStyles((theme) => ({
   AppBar: {
@@ -36,7 +38,9 @@ const Navbar = () => {
   const classes = useStyles();
   const location = useLocation();
 
-  const paths = [
+  const { authenticated, role } = useAuth();
+
+  const pathsCustomer = [
     "/",
     "/customers",
     "/subscriptions",
@@ -44,15 +48,22 @@ const Navbar = () => {
     "/plans",
     "/invoices",
     "/addData",
-    "/feedback",
     "/feedbacks",
-    "/pollForm",
     "/pollAnswers",
+  ];
+  const pathsAdmin = [
+    "/",
+    "/devices",
+    "/plans",
+    "/invoices",
+    "/feedback",
+    "/pollForm",
     "/customerInvoices",
   ];
 
   const getCurrentTabIndex = () => {
     const currentPath = location.pathname;
+    const paths = role === 1 ? pathsAdmin : pathsCustomer;
     const index = paths.indexOf(currentPath);
     return index !== -1 ? index : 0;
   };
@@ -66,8 +77,10 @@ const Navbar = () => {
             value={getCurrentTabIndex()}
             indicatorColor="primary"
             textColor="primary"
+            
           >
-            <Tab
+            {authenticated && (role === 2 || role === 1) && (
+              <Tab
               label="Home"
               component={Link}
               to="/"
@@ -75,15 +88,20 @@ const Navbar = () => {
                 getCurrentTabIndex() === 0 ? classes.activeTab : ""
               }`}
             />
-            <Tab
+            )}
+            {authenticated && role === 1 && (
+              <Tab
               label="Customers"
               component={Link}
               to="/customers"
               className={`${classes.menuLink} ${
-                getCurrentTabIndex() === 1 ? classes.activeTab : ""
+                getCurrentTabIndex() === 1? classes.activeTab : ""
               }`}
             />
-            <Tab
+            )}
+            
+            {authenticated && role === 1 && (
+              <Tab
               label="Customers Subscription"
               component={Link}
               to="/subscriptions"
@@ -91,8 +109,9 @@ const Navbar = () => {
                 getCurrentTabIndex() === 2 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            {authenticated && (role === 2 || role === 1) && (
+              <Tab
               label="Devices"
               component={Link}
               to="/devices"
@@ -100,8 +119,9 @@ const Navbar = () => {
                 getCurrentTabIndex() === 3 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            {authenticated && (role === 2 || role === 1) && (
+              <Tab
               label="Plans"
               component={Link}
               to="/plans"
@@ -109,8 +129,10 @@ const Navbar = () => {
                 getCurrentTabIndex() === 4 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            
+            {authenticated && role === 1 && (
+              <Tab
               label="Invoices"
               component={Link}
               to="/invoices"
@@ -118,8 +140,10 @@ const Navbar = () => {
                 getCurrentTabIndex() === 5 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            
+            {authenticated && role === 1 && (
+              <Tab
               label="Add Data"
               component={Link}
               to="/addData"
@@ -127,8 +151,10 @@ const Navbar = () => {
                 getCurrentTabIndex() === 6 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            
+            {authenticated && role === 2 && (
+             <Tab
               label="Feedback"
               component={Link}
               to="/feedback"
@@ -136,8 +162,10 @@ const Navbar = () => {
                 getCurrentTabIndex() === 7 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            
+            {authenticated && role === 1 && (
+              <Tab
               label="Feedbacks"
               component={Link}
               to="/feedbacks"
@@ -145,8 +173,9 @@ const Navbar = () => {
                 getCurrentTabIndex() === 8 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            {authenticated && role === 2 && (
+              <Tab
               label="Poll Form"
               component={Link}
               to="/pollForm"
@@ -154,8 +183,9 @@ const Navbar = () => {
                 getCurrentTabIndex() === 9 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            {authenticated && role === 1 && (
+              <Tab
               label="Poll Answers"
               component={Link}
               to="/pollAnswers"
@@ -163,8 +193,9 @@ const Navbar = () => {
                 getCurrentTabIndex() === 10 ? classes.activeTab : ""
               }`}
             />
-
-            <Tab
+            )}
+            {authenticated && role === 2 && (
+              <Tab
               label="Customer Invoices"
               component={Link}
               to="/customerInvoices"
@@ -172,6 +203,8 @@ const Navbar = () => {
                 getCurrentTabIndex() === 10 ? classes.activeTab : ""
               }`}
             />
+            )}
+            
 
             <Logout />
           </Tabs>

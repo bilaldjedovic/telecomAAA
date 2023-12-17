@@ -9,7 +9,7 @@ const Logout = () => {
   };
 
   return (
-    <div>
+    <div style={{ display: 'flex', alignItems: 'center'}}>
       <h2>Logout</h2>
       <button onClick={handleLogout}>Logout</button>
     </div>
