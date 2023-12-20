@@ -3,7 +3,7 @@ import { Route, Navigate } from "react-router-dom";
 import { useAuth } from "./AuthContext";
 
 const ProtectedRoute = ({ element: Element, ...rest }) => {
-  const { authenticated, role } = useAuth();
+  const { authenticated, roleId } = useAuth();
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {

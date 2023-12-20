@@ -76,15 +76,17 @@ const Login = () => {
         const user = await response.json();
 
         if (user.password === password) {
-          const { role, customer } = user;
+          const { roleId, customerId } = user;
 
-          document.cookie = `role=${role.id};expires=1;path=/`;
+          document.cookie = `role=${roleId};expires=1;path=/`;
 
-          document.cookie = `customerId=${customer.id};expires=1;path=/`;
+          document.cookie = `customerId=${customerId};expires=1;path=/`;
+
+          document.cookie = `userId=${user.id};expires=1;path=/`;
 
           login(user);
 
-          navigate(user.role.id === 1 ? "/" : "/");
+          navigate(user.roleId === 1 ? "/" : "/");
         } else {
           setError("Invalid credentials");
         }

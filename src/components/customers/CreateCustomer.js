@@ -101,7 +101,7 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
   return (
     <div className="modal-container">
       {customerId ? (
-        <SubscriptionForm
+        <CreateUser
           customerId={customerId}
           customer={newCustomer}
           onClose={onClose}
@@ -201,6 +201,109 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
     </div>
   );
 };
+
+const CreateUser = ({ onClose, onUpdate, customerId }) => {
+  const [newUser, setNewUser] = useState({
+    username: "",
+    password: "",
+    email: "",
+    roleId: 2,
+    customerId: customerId,
+  });
+
+  const [successMessage, setSuccessMessage] = useState("");
+  const [userId, setUserId] = useState(null);
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    const [fieldName, nestedFieldName] = name.split(".");
+
+    if (nestedFieldName) {
+      setNewUser((prevCustomer) => ({
+        ...prevCustomer,
+        [fieldName]: {
+          ...prevCustomer[fieldName],
+          [nestedFieldName]: value,
+        },
+      }));
+    } else {
+      setNewUser((prevCustomer) => ({
+        ...prevCustomer,
+        [fieldName]: value,
+      }));
+    }
+  };
+
+  const handleCreation = async () => {
+    try {
+      const response = await axios.post(
+        "http://localhost:8080/user/createUser",
+        newUser
+      );
+
+      const createdUserId = response.data.id;
+
+      setUserId(createdUserId);
+
+      setSuccessMessage("Customer created successfully!");
+    } catch (error) {
+      console.error("Error creating customer: ", error);
+    }
+  };
+
+  return (
+    <div className="modal-container">
+      {userId ? (
+        <SubscriptionForm customerId={customerId} onClose={onClose} />
+      ) : (
+        <>
+          <h2>Add User</h2>
+          <form>
+            <TextField
+              label="Username"
+              type="text"
+              name="username"
+              value={newUser.username}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <TextField
+              label="Password"
+              type="text"
+              name="password"
+              value={newUser.password}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <TextField
+              label="Email"
+              type="text"
+              name="email"
+              value={newUser.email}
+              onChange={handleInputChange}
+              className="form-input"
+            />
+
+            <Button type="button" onClick={handleCreation}>
+              Create User
+            </Button>
+            <Button type="button" onClick={onClose}>
+              Cancel
+            </Button>
+          </form>
+
+          {successMessage && (
+            <div className="success-message">{successMessage}</div>
+          )}
+        </>
+      )}
+    </div>
+  );
+};
+
 const SubscriptionForm = ({ customerId, customer, onClose }) => {
   const [subscriptionData, setSubscriptionData] = useState({
     customPlanId: 0,

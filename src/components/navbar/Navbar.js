@@ -179,6 +179,17 @@ const Navbar = () => {
                 }`}
               />
             )}
+
+            {authenticated && role === 2 && (
+              <Tab
+                label="My profile"
+                component={Link}
+                to="/myProfile"
+                className={`${classes.menuLink} ${
+                  location.pathname === "/myProfile" ? classes.activeTab : ""
+                }`}
+              />
+            )}
             {authenticated && <Logout />}
           </Tabs>
         </Toolbar>
