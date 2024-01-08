@@ -1,13 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import {
-  Button,
-  FormControl,
-  InputLabel,
-  MenuItem,
-  Select,
-  TextField,
+ Button,
+ FormControl,
+ InputLabel,
+ MenuItem,
+ Select,
+ TextField,
 } from "@mui/material";
+import styled from 'styled-components';
+
+const FormContainer = styled.div`
+ display: flex;
+ flex-direction: column;
+ justify-content: center;
+ align-items: center;
+ height: 100vh;
+ background-color: #f4f4f4;
+ padding: 20px;
+ border-radius: 8px;
+ box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+`;
+
+const FormInput = styled(TextField)`
+ margin-bottom: 1rem;
+ padding: 0.5rem;
+ border-radius: 4px;
+ border: 1px solid #ddd;
+`;
+
+const FormButton = styled(Button)`
+ margin-top: 1rem;
+ padding: 0.5rem 1rem;
+ border-radius: 4px;
+ background-color: #2196f3;
+ color: #fff;
+ cursor: pointer;
+ transition: background-color 0.3s ease;
+
+ &:hover {
+   background-color: #1a73e8;
+ }
+`;
 
 const CreateCustomers = ({ onClose, onUpdate }) => {
   const [newCustomer, setNewCustomer] = useState({
@@ -48,6 +82,7 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
 
     fetchData();
   }, []);
+
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -109,8 +144,9 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
       ) : (
         <>
           <h2>Add Customer</h2>
+          <FormContainer>
           <form>
-            <TextField
+            <FormInput
               label="First Name"
               type="text"
               name="firstName"
@@ -119,7 +155,7 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
               className="form-input"
             />
 
-            <TextField
+            <FormInput
               label="Last Name"
               type="text"
               name="lastName"
@@ -176,7 +212,7 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
               </Select>
             </FormControl>
 
-            <TextField
+            <FormInput
               label="Address"
               type="text"
               name="address"
@@ -185,17 +221,17 @@ const CreateCustomers = ({ onClose, onUpdate }) => {
               className="form-input"
             />
 
-            <Button type="button" onClick={handleCreation}>
+            <FormButton type="button" onClick={handleCreation}>
               Create Customer
-            </Button>
-            <Button type="button" onClick={onClose}>
+            </FormButton>
+            <FormButton type="button" onClick={onClose}>
               Cancel
-            </Button>
+            </FormButton>
           </form>
-
           {successMessage && (
             <div className="success-message">{successMessage}</div>
-          )}
+            )}
+            </FormContainer>
         </>
       )}
     </div>
@@ -260,7 +296,7 @@ const CreateUser = ({ onClose, onUpdate, customerId }) => {
         <>
           <h2>Add User</h2>
           <form>
-            <TextField
+            <FormInput
               label="Username"
               type="text"
               name="username"
@@ -269,7 +305,7 @@ const CreateUser = ({ onClose, onUpdate, customerId }) => {
               className="form-input"
             />
 
-            <TextField
+            <FormInput
               label="Password"
               type="text"
               name="password"
@@ -278,7 +314,7 @@ const CreateUser = ({ onClose, onUpdate, customerId }) => {
               className="form-input"
             />
 
-            <TextField
+            <FormInput
               label="Email"
               type="text"
               name="email"
@@ -287,12 +323,12 @@ const CreateUser = ({ onClose, onUpdate, customerId }) => {
               className="form-input"
             />
 
-            <Button type="button" onClick={handleCreation}>
+            <FormButton type="button" onClick={handleCreation}>
               Create User
-            </Button>
-            <Button type="button" onClick={onClose}>
+            </FormButton>
+            <FormButton type="button" onClick={onClose}>
               Cancel
-            </Button>
+            </FormButton>
           </form>
 
           {successMessage && (
@@ -575,7 +611,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
 
             {subscriptionData.planType === "custom" && (
               <div>
-                <TextField
+                <FormInput
                   label="Custom Plan Cost Per Month"
                   type="number"
                   name="customPlan.costPerMonth"
@@ -583,7 +619,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
                   onChange={handleSubscriptionInputChange}
                 />
 
-                <TextField
+                <FormInput
                   label="Custom Plan Minimum Contract Length (months)"
                   type="number"
                   name="customPlan.minimumContractLength"
@@ -648,7 +684,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
                   </Select>
                 </FormControl>
 
-                <TextField
+                <FormInput
                   label="On number of months"
                   type="number"
                   name="deviceInfo.onNumberOfMonths"
@@ -656,7 +692,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
                   onChange={handleSubscriptionInputChange}
                 />
 
-                <TextField
+                <FormInput
                   label="Start date"
                   type="date"
                   name="deviceInfo.startDate"
@@ -682,7 +718,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
 
         {currentStep === 4 && (
           <div>
-            <TextField
+            <FormInput
               label="Telephone Number"
               type="text"
               name="telephoneNumber"
@@ -690,7 +726,7 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
               onChange={handleSubscriptionInputChange}
             />
 
-            <TextField
+            <FormInput
               label="Contract Length"
               type="number"
               name="contractLength"
@@ -713,24 +749,24 @@ const SubscriptionForm = ({ customerId, customer, onClose }) => {
         )}
 
         {currentStep > 1 && (
-          <Button type="button" onClick={handlePreviousStep}>
+          <FormButton type="button" onClick={handlePreviousStep}>
             Previous
-          </Button>
+          </FormButton>
         )}
 
         {currentStep < 4 ? (
-          <Button type="button" onClick={handleNextStep}>
+          <FormButton type="button" onClick={handleNextStep}>
             Next
-          </Button>
+          </FormButton>
         ) : (
-          <Button type="button" onClick={handleSubscriptionCreation}>
+          <FormButton type="button" onClick={handleSubscriptionCreation}>
             Create Subscription
-          </Button>
+          </FormButton>
         )}
 
-        <Button type="button" onClick={onClose}>
+        <FormButton type="button" onClick={onClose}>
           Cancel
-        </Button>
+        </FormButton>
       </form>
     </div>
   );

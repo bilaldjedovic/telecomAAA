@@ -69,8 +69,8 @@ const CustomerSubscription = () => {
   }
 
   return (
-    <div className="subscription-details-container">
-      <Typography variant="h4" gutterBottom>
+    <div className="subscription-details-container" style={{ margin: "60px" }}>
+      <Typography variant="h4" gutterBottom style={{ color: "#2196f3" }}>
         My subscription
       </Typography>
 

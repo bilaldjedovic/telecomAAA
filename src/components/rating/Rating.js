@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Button, Alert } from "react-bootstrap";
 import "./Rating.css";
 import { useAuth } from "../login/AuthContext";
 
@@ -11,7 +11,7 @@ const colors = {
 };
 
 const Rating = () => {
-  const { authenticated, role, customerId } = useAuth();
+  const {  customerId } = useAuth();
 
   const [review, setReview] = useState({
     customerId: customerId,

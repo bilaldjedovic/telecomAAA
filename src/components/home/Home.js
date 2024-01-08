@@ -73,7 +73,6 @@ const Home = () => {
 
   return (
     <Container>
-      <Title>Tech News</Title>
       <NewsList>
         {news.map((article) => (
           <NewsItem key={article.title}>

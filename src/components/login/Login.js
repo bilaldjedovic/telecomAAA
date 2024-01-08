@@ -13,6 +13,13 @@ const LoginContainer = styled.div`
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
 `;
 
+const PageContainer = styled.div`
+ display: flex;
+ justify-content: center;
+ align-items: center;
+ height: 70vh;
+`;
+
 const Title = styled.h2`
   text-align: center;
   color: #333;
@@ -100,6 +107,8 @@ const Login = () => {
   };
 
   return (
+    <PageContainer>
+
     <LoginContainer>
       <Title>Login</Title>
       <InputContainer>
@@ -121,6 +130,8 @@ const Login = () => {
       {error && <ErrorMessage>{error}</ErrorMessage>}
       <Button onClick={handleLogin}>Login</Button>
     </LoginContainer>
+    </PageContainer>
+
   );
 };
 

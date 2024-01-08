@@ -13,6 +13,7 @@ import { useAuth } from "../login/AuthContext";
 const useStyles = makeStyles((theme) => ({
   AppBar: {
     backgroundColor: "#ffffff",
+    marginBottom: "20px"
   },
   Toolbar: {
     display: "flex",
@@ -21,16 +22,13 @@ const useStyles = makeStyles((theme) => ({
   menuLink: {
     color: "#2196f3",
     textDecoration: "none",
-    marginLeft: "15px",
-    fontSize: "11px",
+   
+    fontSize: "14px", // Adjusted font size for better visibility
     "&.Mui-selected": {
       textDecoration: "underline",
     },
-  },
-  logo: {
-    width: 90,
-    height: 90,
-  },
+  }
+ 
 }));
 
 const Navbar = () => {
@@ -43,7 +41,6 @@ const Navbar = () => {
     <div>
       <AppBar position="static" className={classes.AppBar}>
         <Toolbar className={classes.Toolbar}>
-          <img alt="logo" src={logoImage} className={classes.logo} />
           <Tabs indicatorColor="primary" textColor="primary">
             {authenticated && (role === 2 || role === 1) && (
               <Tab
